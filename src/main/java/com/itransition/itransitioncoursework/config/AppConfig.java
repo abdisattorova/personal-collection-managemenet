@@ -2,8 +2,6 @@ package com.itransition.itransitioncoursework.config;
 //Sevinch Abdisattorova 06/16/2022 9:57 AM
 
 
-import com.itransition.itransitioncoursework.entity.Role;
-import com.itransition.itransitioncoursework.entity.enums.RoleEnum;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
