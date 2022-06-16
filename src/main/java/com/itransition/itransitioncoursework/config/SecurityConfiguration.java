@@ -39,7 +39,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers(
-                        "/registration**",
+                        "/**","/registration**",
                         "/login**",
                         "/js/**",
                         "/css/**",
@@ -58,6 +58,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .clearAuthentication(true)
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/login?logout")
-                .permitAll();
+                .permitAll()
+                .and()
+                .oauth2Login()
+                .loginPage("/login")
+                .permitAll()
+                .defaultSuccessUrl("/success-oauth2");
     }
 }
