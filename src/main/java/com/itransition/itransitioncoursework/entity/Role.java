@@ -7,7 +7,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.PackagePrivate;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -19,6 +22,7 @@ import javax.persistence.Enumerated;
 @PackagePrivate
 public class Role extends AbsEntity {
 
+    @Cascade(CascadeType.ALL)
     @Enumerated(EnumType.STRING)
     RoleEnum roleEnum;
 

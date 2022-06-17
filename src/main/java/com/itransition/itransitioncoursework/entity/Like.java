@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.PackagePrivate;
 
 import javax.persistence.*;
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor

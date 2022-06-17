@@ -14,9 +14,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-
 @RequiredArgsConstructor
 @Slf4j
 @Service
@@ -28,6 +25,7 @@ public class UserService implements UserDetailsService {
 
     private final BCryptPasswordEncoder passwordEncoder;
 
+
     @Override
     public UserDetails loadUserByUsername(String email)
             throws UsernameNotFoundException {
@@ -38,11 +36,25 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
+
+    public void processOAuthPostLogin(String username) {
+        User existUser = userRepository.findByEmail(username);
+
+        if (existUser == null) {
+            User newUser = new User();
+            newUser.setEmail(username);
+            userRepository.save(newUser);
+        }
+
+    }
+
+
     public void save(RegistrationDto registrationDto) {
         registrationDto.setPassword(passwordEncoder.encode(registrationDto.getPassword()));
         User user = userMapper.userRegistrationDtoToUser(registrationDto);
         userRepository.save(user);
     }
+
 
     public boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email);

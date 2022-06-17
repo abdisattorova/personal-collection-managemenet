@@ -1,6 +1,8 @@
 package com.itransition.itransitioncoursework.controller;
 
 import com.itransition.itransitioncoursework.dto.RegistrationDto;
+import com.itransition.itransitioncoursework.entity.User;
+import com.itransition.itransitioncoursework.repository.UserRepository;
 import com.itransition.itransitioncoursework.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,6 +10,8 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -31,6 +35,7 @@ public class AuthController {
 
     private final OAuth2AuthorizedClientService authorizedClientService;
     private final UserService userService;
+    private final UserRepository userRepository;
 
 
     @GetMapping("/login")
@@ -69,6 +74,7 @@ public class AuthController {
     @GetMapping("/success-oauth2")
     public String getLoginInfo(Model model,
                                OAuth2AuthenticationToken authentication) {
+
         OAuth2AuthorizedClient client = authorizedClientService
                 .loadAuthorizedClient(
                         authentication.getAuthorizedClientRegistrationId(),
@@ -97,9 +103,22 @@ public class AuthController {
                     entity,
                     Map.class);
 
-            Map userAttributes = response.getBody(); // user ma'lumotlari
+            Map userAttributes = response.getBody(); // user information
 
-            System.out.println(userAttributes);
+            String name = (String) userAttributes.get("name");
+            String email = (String) userAttributes.get("email");
+            String[] s = name.split(" ");
+            User userByEmail = userRepository.findByEmail(email);
+            if (userByEmail == null) {
+                User user = User.builder().email(email).firstName(s[0]).lastName(s[1]).build();
+                userByEmail = userRepository.save(user);
+            }
+
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userByEmail,
+                    null,
+                    userByEmail.getAuthorities());
+
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }
         return "redirect:/";
     }
