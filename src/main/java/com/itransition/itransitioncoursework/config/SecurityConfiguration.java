@@ -29,20 +29,26 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return auth;
     }
 
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(authenticationProvider());
     }
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
                 .antMatchers(
-                        "/**","/registration**",
-                        "/login**",
+                        "/","/registration/**",
+                        "/login/**",
                         "/js/**",
                         "/css/**",
+                        "/vendor/**",
+                        "/video/**",
+                        "/fonts/**",
+                        "/fontawesome/**",
                         "/images/**")
                 .permitAll()
                 .anyRequest()

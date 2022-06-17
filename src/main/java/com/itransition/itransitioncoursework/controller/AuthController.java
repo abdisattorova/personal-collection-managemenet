@@ -4,32 +4,23 @@ import com.itransition.itransitioncoursework.dto.RegistrationDto;
 import com.itransition.itransitioncoursework.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.client.RestTemplate;
 
 import javax.validation.Valid;
-import java.util.Map;
 
 @Slf4j
 @Controller
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final OAuth2AuthorizedClientService authorizedClientService;
+
     private final UserService userService;
 
 
@@ -66,41 +57,12 @@ public class AuthController {
         return "redirect:/login?registered";
     }
 
+
     @GetMapping("/success-oauth2")
-    public String getLoginInfo(Model model,
-                               OAuth2AuthenticationToken authentication) {
-        OAuth2AuthorizedClient client = authorizedClientService
-                .loadAuthorizedClient(
-                        authentication.getAuthorizedClientRegistrationId(),
-                        authentication.getName());
+    public String getLoginInfo(
+            OAuth2AuthenticationToken authentication) {
 
-        String userInfoEndpointUri = client
-                .getClientRegistration()
-                .getProviderDetails()
-                .getUserInfoEndpoint()
-                .getUri();
+        return userService.oauthSuccess(authentication);
 
-        if (!StringUtils.isEmpty(userInfoEndpointUri)) {
-
-            RestTemplate restTemplate = new RestTemplate();
-
-            HttpHeaders headers = new HttpHeaders();
-
-            headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + client.getAccessToken()
-                    .getTokenValue());
-
-            HttpEntity entity = new HttpEntity("", headers);
-
-            ResponseEntity<Map> response = restTemplate.exchange(
-                    userInfoEndpointUri,
-                    HttpMethod.GET,
-                    entity,
-                    Map.class);
-
-            Map userAttributes = response.getBody(); // user ma'lumotlari
-
-            System.out.println(userAttributes);
-        }
-        return "redirect:/";
     }
 }
