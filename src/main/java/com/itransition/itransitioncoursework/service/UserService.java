@@ -102,7 +102,8 @@ public class UserService implements UserDetailsService {
             String[] s = name.split(" ");
             User userByEmail = userRepository.findByEmail(email);
             if (userByEmail == null) {
-                User user = User.builder().email(email).firstName(s[0]).lastName(s[1]).build();
+                User user = new
+                        User(s[0],s[1],email);
                 userByEmail = userRepository.save(user);
             }
 

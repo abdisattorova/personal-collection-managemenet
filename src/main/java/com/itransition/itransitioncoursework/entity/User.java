@@ -1,6 +1,7 @@
 package com.itransition.itransitioncoursework.entity;
 //Sevinch Abdisattorova 06/08/2022 12:29 PM
 
+import com.itransition.itransitioncoursework.entity.enums.RoleEnum;
 import com.itransition.itransitioncoursework.entity.template.AbsEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,7 +38,13 @@ public class User extends AbsEntity implements UserDetails {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "role_id")
-    Role role;
+    Role role = new Role(RoleEnum.USER);
+
+    public User(String firstName, String lastName, String email) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

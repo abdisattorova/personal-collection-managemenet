@@ -16,7 +16,7 @@ public class UserMapper {
 
     public User userRegistrationDtoToUser(RegistrationDto dto) {
         User user = mapper.map(dto, User.class);
-        user.setRole(new Role(RoleEnum.USER));
+//        user.setRole(new Role(RoleEnum.USER));
         return user;
     }
 }
