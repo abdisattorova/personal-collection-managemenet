@@ -31,5 +31,6 @@ public class Collection extends AbsEntity {
     @ManyToOne
     @JoinColumn(name = "user_id")
     User user;
+    
 }
 
