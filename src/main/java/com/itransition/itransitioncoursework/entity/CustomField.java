@@ -25,5 +25,9 @@ public class CustomField extends AbsEntity {
     @JoinColumn(name = "collection_id")
     Collection collection;
 
+    public CustomField(String name, FieldDataType fieldDataType) {
+        this.name = name;
+        this.fieldDataType = fieldDataType;
+    }
 }
 

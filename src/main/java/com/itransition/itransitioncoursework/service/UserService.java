@@ -103,7 +103,7 @@ public class UserService implements UserDetailsService {
             User userByEmail = userRepository.findByEmail(email);
             if (userByEmail == null) {
                 User user = new
-                        User(s[0],s[1],email);
+                        User(s[0], s[1], email);
                 userByEmail = userRepository.save(user);
             }
 
