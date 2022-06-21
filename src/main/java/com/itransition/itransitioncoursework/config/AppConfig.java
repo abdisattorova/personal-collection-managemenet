@@ -15,7 +15,6 @@ import java.util.Map;
 @Configuration
 public class AppConfig {
 
-
     @Value("${CLOUD_NAME}")
     private String cloudName;
 
@@ -36,7 +35,6 @@ public class AppConfig {
     public ModelMapper mapper() {
         return new ModelMapper();
     }
-
 
 
     @Bean
