@@ -112,10 +112,11 @@
 							Name
 						</span>
 
-                    <p style="color: red"
-                       th:each="error : ${#fields.errors('name')}" th:text="${error}"></p>
-                    <p style="color: red"
-                       th:each="error : ${#fields.errors('name')}" th:inline="text">[[${error}]]"></p>
+                    <p th:if="${#fields.hasErrors('name')}">Invalid name</p>
+<!--                    <p style="color: red"-->
+<!--                       th:each="error : ${#fields.errors('name')}" th:text="${error}"></p>-->
+<!--                    <p style="color: red"-->
+<!--                       th:each="error : ${#fields.errors('name')}" th:inline="text">[[${error}]]"></p>-->
                 </div>
                 <div class="wrap-input100">
                     <input
@@ -171,9 +172,9 @@
                 						</span>
                     <p style="color: red"
                        th:each="error : ${#fields.errors('image')}" th:text="${error}"></p>
-                    <div th:if="${param.imageError}">
-                        <p style="color: red">You can only upload images</p>
-                    </div>
+                </div>
+                <div class="p-t-31 p-b-9">
+                    <p class="errorMassage" style="color: red; display: none">You can only upload images</p>
                 </div>
                 <div class="wrap-input100">
                     <input
@@ -182,7 +183,7 @@
                             class="inputFile"
                             type="file"
                             name="image"
-                            accept="image/*"
+                            accept=".jpeg"
                             th:field="*{image}"
                             placeholder="Upload an image of the collection">
                     <span class="focus-input100"></span>
@@ -200,7 +201,7 @@
                 </div>
 
                 <div class="container-login100-form-btn m-t-17">
-                    <button type="submit" class="login100-form-btn">
+                    <button type="submit" id="buttonSave" class="login100-form-btn">
                         Save
                     </button>
                 </div>
@@ -269,6 +270,7 @@
         const description = document.getElementById('description').value;
         const topicId = document.getElementById('topicId').value;
         const body = {name, description, topicId, customFields}
+        const errorMassage = document.querySelector(".errorMassage")
         console.log(body);
 
         let formData = new FormData();
@@ -279,16 +281,22 @@
                 type: "application/json"
             }));
         var input = document.querySelector('input[type="file"]')
-        formData.append('image', input.files[0])
-
-        for (let [name, value] of formData) {
-            console.log(`${name} = ${value}`);
+        if (input.files[0].type!=="image/jpeg"){
+            errorMassage.style.display = "block"
         }
+        else{
+            errorMassage.style.display = "none"
+            formData.append('image', input.files[0])
 
-        let response = await fetch('/collection', {
-            method: 'POST',
-            body: formData
-        });
+            for (let [name, value] of formData) {
+                console.log(`${name} = ${value}`);
+            }
+
+            let response = await fetch('/collection', {
+                method: 'POST',
+                body: formData
+            });
+        }
     }
 
 </script>

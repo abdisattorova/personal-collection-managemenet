@@ -65,9 +65,7 @@ public class CollectionController {
 //        }
 //
 //        System.out.println(collection);
-
-        collection.setImage(image);
-        collectionService.saveCollection(collection);
+        collectionService.saveCollection(collection,image);
         return "collection";
     }
 }

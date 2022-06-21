@@ -28,9 +28,8 @@ import java.util.Optional;
 public class CollectionService {
 
 
-    private final CloudinaryService cloudinaryService;
-
     private final TopicRepository topicRepository;
+
     private final Cloudinary cloudinary;
 
     private final CollectionRepository collectionRepository;
@@ -38,14 +37,14 @@ public class CollectionService {
     private final CustomFieldRepository customFieldRepository;
 
 
-    public void saveCollection(CollectionDto collectionDto) {
+    public void saveCollection(CollectionDto collectionDto, MultipartFile image) {
 
         Collection collection = new Collection();
         collection.setName(collectionDto.getName());
         collection.setDescription(collectionDto.getDescription());
 
         try {
-            File uploadedFile = convertMultiPartToFile(collectionDto.getImage());
+            File uploadedFile = convertMultiPartToFile(image);
             Map uploadResult = cloudinary.uploader().upload(uploadedFile, ObjectUtils.emptyMap());
             String url = uploadResult.get("url").toString();
             collection.setImageUrl(url);
@@ -68,12 +67,15 @@ public class CollectionService {
 
     }
 
+
     private File convertMultiPartToFile(MultipartFile file) throws IOException {
-        // TODO: 06/19/2022 check if name is unique
-        File convFile = new File(file.getOriginalFilename());
+        File convFile = new File("src/main/resources/file/" + file.getOriginalFilename());
         FileOutputStream fos = new FileOutputStream(convFile);
         fos.write(file.getBytes());
         fos.close();
         return convFile;
     }
+
 }
+
+
