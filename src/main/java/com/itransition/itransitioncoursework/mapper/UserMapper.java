@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class UserMapper {
 
+
      private final ModelMapper mapper;
 
     public User userRegistrationDtoToUser(RegistrationDto dto) {

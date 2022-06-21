@@ -25,24 +25,33 @@
     <!--==============================================  =================================================-->
     <link rel="stylesheet" type="text/css" href="/css/util.css">
     <link rel="stylesheet"  type="text/css" href="/css/main.css">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/darkmode.css">
     <!--===============================================================================================-->
 
+    <!-- Scripts -->
+    <script src="/dark-mode-switch.min.js"></script>
 </head>
 <body>
 
 <div class="limiter">
-    <div class="container-login100" style="background-image: url('images/bg-01.jpg');">
 
-        <div class="wrap-login100 p-l-110 p-r-110 p-t-62 p-b-33">
+    <div class="form-check form-switch d-none" style="margin-left: 20px">
+        <input type="checkbox" class="form-check-input" id="darkSwitch">
+    </div>
+
+    <div class="container-login100" style="background-image: url('/images/bg-01.jpg');">
+
+        <div class="wrap-login100 p-l-110 p-r-110 p-t-40 p-b-33 bg-light">
 
             <div th:if="${param.registered}">
-                <div class="alert-success">
+                <div class="alert-success mb-2" style="background-color: limegreen">
                     <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
                     You have successfully registered!
                 </div>
             </div>
             <div th:if="${param.error}">
-                <div class="alert-error">
+                <div class="alert-error mb-5">
                     <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
                     Invalid email or password!
                 </div>
@@ -120,21 +129,22 @@
 <div id="dropDownSelect1"></div>
 
 <!--===============================================================================================-->
-<script src="/vendor/jquery/jquery-3.2.1.min.js"></script>
+<script src="/static/vendor/jquery/jquery-3.2.1.min.js"></script>
 <!--===============================================================================================-->
-<script src="/vendor/animsition/js/animsition.min.js"></script>
+<script src="/static/vendor/animsition/js/animsition.min.js"></script>
 <!--===============================================================================================-->
-<script src="/vendor/bootstrap/js/popper.js"></script>
-<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="/static/vendor/bootstrap/js/popper.js"></script>
+<script src="/static/vendor/bootstrap/js/bootstrap.min.js"></script>
 <!--===============================================================================================-->
-<script src="/vendor/select2/select2.min.js"></script>
+<script src="/static/vendor/select2/select2.min.js"></script>
 <!--===============================================================================================-->
-<script src="/vendor/daterangepicker/moment.min.js"></script>
-<script src="/vendor/daterangepicker/daterangepicker.js"></script>
+<script src="/static/vendor/daterangepicker/moment.min.js"></script>
+<script src="/static/vendor/daterangepicker/daterangepicker.js"></script>
 <!--===============================================================================================-->
-<script src="/vendor/countdowntime/countdowntime.js"></script>
+<script src="/static/vendor/countdowntime/countdowntime.js"></script>
 <!--===============================================================================================-->
-<script src="/js/main.js"></script>
+<script src="/static/js/main.js"></script>
+<script src="/js/darkmode.js"> </script>
 
 </body>
 </html>

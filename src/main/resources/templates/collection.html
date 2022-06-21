@@ -28,8 +28,15 @@
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="/css/util.css">
     <link rel="stylesheet" type="text/css" href="/css/collection.css">
+    <link rel="stylesheet" href="/css/main.css">
     <!--===============================================================================================-->
 
+
+    <link rel="stylesheet" href="/css/darkmode.css">
+    <!--===============================================================================================-->
+
+    <!-- Scripts -->
+    <script src="/dark-mode-switch.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
     <script>
@@ -87,36 +94,36 @@
                     <a class="nav-link nav-link-4" href="contact.html">Contact</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link nav-link-4 active" aria-current="page" href="collection.html">➕ Collection</a>
+                    <a class="nav-link nav-link-1 active" aria-current="page" href="/collection">Collection</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link nav-link-2" aria-current="page" href="/login">Login</a>
                 </li>
             </ul>
+        </div>
+
+        <div class="form-check form-switch" style="margin-left: 20px">
+            <input type="checkbox" class="form-check-input" id="darkSwitch">
         </div>
     </div>
 </nav>
 
 <div class="limiter">
     <div class="container-login100" style="background-image: url('/images/bg-01.jpg');">
-        <div class="wrap-login100 p-l-110 p-r-110 p-t-62 p-b-33">
+        <div class="wrap-login100 p-l-110 p-r-110 p-t-62 p-b-33 bg-light">
             <form class="login100-form validate-form flex-sb flex-w"
                   id="formElem" th:object="${collection}">
-
-
-                <div th:if="${#fields.hasAnyErrors()}">
-                    <ul>
-                        <li th:each="err : ${#fields.allErrors()}" th:text="${err}"/>
-                    </ul>
-                </div>
 
                 <div class="p-t-31 p-b-9">
 						<span class="txt1">
 							Name
 						</span>
 
-                    <p th:if="${#fields.hasErrors('name')}">Invalid name</p>
-<!--                    <p style="color: red"-->
-<!--                       th:each="error : ${#fields.errors('name')}" th:text="${error}"></p>-->
-<!--                    <p style="color: red"-->
-<!--                       th:each="error : ${#fields.errors('name')}" th:inline="text">[[${error}]]"></p>-->
+                    <!--                    <p th:if="${#fields.hasErrors('name')}">Invalid name</p>-->
+                    <!--                    <p style="color: red"-->
+                    <!--                       th:each="error : ${#fields.errors('name')}" th:text="${error}"></p>-->
+                    <!--                    <p style="color: red"-->
+                    <!--                       th:each="error : ${#fields.errors('name')}" th:inline="text">[[${error}]]"></p>-->
                 </div>
                 <div class="wrap-input100">
                     <input
@@ -281,10 +288,9 @@
                 type: "application/json"
             }));
         var input = document.querySelector('input[type="file"]')
-        if (input.files[0].type!=="image/jpeg"){
+        if (input.files[0].type !== "image/jpeg") {
             errorMassage.style.display = "block"
-        }
-        else{
+        } else {
             errorMassage.style.display = "none"
             formData.append('image', input.files[0])
 
@@ -316,5 +322,6 @@
 <script src="/vendor/countdowntime/countdowntime.js"></script>
 <!--===============================================================================================-->
 <script src="/js/script.js"></script>
+<script src="/js/darkmode.js"></script>
 </body>
 </html>

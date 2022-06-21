@@ -4,10 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catalog-Z Contact page</title>
-    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../static/fontawesome/css/all.min.css">
-    <link rel="stylesheet" href="../static/css/templatemo-style.css">
-<!--
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="/css/templatemo-style.css">
+
+    <link rel="stylesheet" href="/css/darkmode.css">
+    <!--===============================================================================================-->
+
+    <!-- Scripts -->
+    <script src="dark-mode-switch.min.js"></script>
+    <!--
     
 TemplateMo 556 Catalog-Z
 
@@ -48,9 +54,12 @@ https://templatemo.com/tm-556-catalog-z
                     <a class="nav-link nav-link-4 active" aria-current="page" href="contact.html">Contact</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link nav-link-4" href="collection.html">➕ Collection</a>
+                    <a class="nav-link nav-link-4" href="collection.html"> Collection</a>
                 </li>
             </ul>
+            </div>
+            <div class="form-check form-switch" style="margin-left: 20px">
+                <input type="checkbox" class="form-check-input" id="darkSwitch">
             </div>
         </div>
     </nav>
@@ -130,7 +139,7 @@ https://templatemo.com/tm-556-catalog-z
         </div>
         <div class="row tm-mb-74 tm-people-row">
             <div class="col-lg-3 col-md-6 col-sm-6 col-12 mb-5">
-                <img src="../static/images/people-1.jpg" alt="Image" class="mb-4 img-fluid">
+                <img src="/images/people-1.jpg" alt="Image" class="mb-4 img-fluid">
                 <h2 class="tm-text-primary mb-4">Ryan White</h2>
                 <h3 class="tm-text-secondary h5 mb-4">Chief Executive Officer</h3>
                 <p class="mb-4">
@@ -143,7 +152,7 @@ https://templatemo.com/tm-556-catalog-z
                 </ul>
             </div>
             <div class="col-lg-3 col-md-6 col-sm-6 col-12 mb-5">
-                <img src="../static/images/people-2.jpg" alt="Image" class="mb-4 img-fluid">
+                <img src="/images/people-2.jpg" alt="Image" class="mb-4 img-fluid">
                 <h2 class="tm-text-primary mb-4">Catherine Pinky</h2>
                 <h3 class="tm-text-secondary h5 mb-4">Chief Marketing Officer</h3>
                 <p class="mb-4">
@@ -156,7 +165,7 @@ https://templatemo.com/tm-556-catalog-z
                 </ul>
             </div>
             <div class="col-lg-3 col-md-6 col-sm-6 col-12 mb-5">
-                <img src="../static/images/people-3.jpg" alt="Image" class="mb-4 img-fluid">
+                <img src="/images/people-3.jpg" alt="Image" class="mb-4 img-fluid">
                 <h2 class="tm-text-primary mb-4">Johnny Brief</h2>
                 <h3 class="tm-text-secondary h5 mb-4">Accounting Executive</h3>
                 <p class="mb-4">
@@ -169,7 +178,7 @@ https://templatemo.com/tm-556-catalog-z
                 </ul>
             </div>
             <div class="col-lg-3 col-md-6 col-sm-6 col-12 mb-5">
-                <img src="../static/images/people-4.jpg" alt="Image" class="mb-4 img-fluid">
+                <img src="/images/people-4.jpg" alt="Image" class="mb-4 img-fluid">
                 <h2 class="tm-text-primary mb-4">George Nelson</h2>
                 <h3 class="tm-text-secondary h5 mb-4">Creative Art Director #C69</h3>
                 <p class="mb-4">
@@ -222,11 +231,12 @@ https://templatemo.com/tm-556-catalog-z
         </div>
     </footer>
     
-    <script src="../static/js/plugins.js"></script>
+    <script src="/js/plugins.js"></script>
     <script>
         $(window).on("load", function() {
             $('body').addClass('loaded');
         });
     </script>
+    <script src="/js/darkmode.js"></script>
 </body>
 </html>
