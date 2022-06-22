@@ -53,6 +53,7 @@ public class AuthController {
                     "Email is already taken!"));
             return "registration";
         }
+
         userService.save(registrationDto);
         return "redirect:/login?registered";
     }

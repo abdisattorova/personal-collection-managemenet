@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-    <title>Registration</title>
+    <title th:text="#{app.registration}"></title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--===============================================================================================-->
@@ -44,8 +44,7 @@
         <div class="wrap-login100 p-l-110 p-r-110 p-t-62 p-b-33 bg-light">
             <form class="login100-form validate-form flex-sb flex-w"
                   th:action="@{/registration}" method="post" th:object="${user}">
-					<span class="login100-form-title p-b-53">
-						Sign up with
+					<span class="login100-form-title p-b-53" th:text="#{app.signUpWith}">
 					</span>
 
                 <a href="#" class="btn-face m-b-20">
@@ -61,11 +60,13 @@
                 <div class="p-t-31 p-b-9" style="display: inline-flex">
 						<span
                                 class="txt1"
-                                style="margin-right: 10px">
-							First name
+                                style="margin-right: 10px"
+                                th:text="#{registration.firstName}">
+
 						</span>
                     <p style="color: red"
-                       th:each="error : ${#fields.errors('firstName')}" th:text="${error}">first name</p>
+                       th:each="error : ${#fields.errors('firstName')}"
+                       th:text="${error}">first name</p>
                 </div>
 
                 <div class="wrap-input100">
@@ -75,7 +76,7 @@
                            type="text"
                            th:field="*{firstName}"
                            th:errorclass="error"
-                           placeholder="Enter your first name">
+                           th:placeholder="#{registration.firstNameEnter}">
                     <span class="focus-input100"></span>
                 </div>
 
@@ -83,7 +84,8 @@
                         class="p-t-31 p-b-9"
                         style="display: inline-flex">
 						<span class="txt1"
-                              style="margin-right: 10px">
+                              style="margin-right: 10px"
+                        th:text="#{registration.lastName}">
 							Last name
 						</span>
                     <p style="color: red"
@@ -98,7 +100,7 @@
                             type="text"
                             th:field="*{lastName}"
                             th:errorclass="error"
-                            placeholder="Enter your last name">
+                            th:placeholder="#{registration.lastNameEnter}">
                     <span class="focus-input100"></span>
                 </div>
 
@@ -119,15 +121,14 @@
                            type="text"
                            th:field="*{email}"
                            th:errorclass="error"
-                           placeholder="example@gmail.com">
+                           th:placeholder="#{email.placeholder}">
                     <span class="focus-input100"></span>
                 </div>
 
                 <div class="p-t-13 p-b-9"
                      style="display: inline-flex">
 						<span class="txt1"
-                              style="margin-right: 10px">
-							Password
+                              style="margin-right: 10px" th:text="#{login.password}">
 						</span>
                     <p style="color: red"
                        th:each="error : ${#fields.errors('password')}" th:text="${error}">password</p>
@@ -142,15 +143,14 @@
                             type="password"
                             th:field="*{password}"
                             th:errorclass="error"
-                            placeholder="Enter a password">
+                            th:placeholder="#{registration.passwordEnter}">
                     <span class="focus-input100"></span>
                 </div>
 
                 <div class="p-t-13 p-b-9"
                      style="display: inline-flex">
 						<span class="txt1"
-                              style="margin-right: 10px">
-							Confirm password
+                              style="margin-right: 10px" th:text="#{registration.confirmPassword}">
 						</span>
                     <p style="color: red"
                        th:each="error : ${#fields.errors('confirmPassword')}" th:text="${error}">confirm password</p>
@@ -165,23 +165,21 @@
                             type="password"
                             th:field="*{confirmPassword}"
                             th:errorclass="error"
-                            placeholder="Enter your password again">
+                            th:placeholder="#{registration.confirmPasswordEnter}">
                     <span class="focus-input100"></span>
                 </div>
 
                 <div class="container-login100-form-btn m-t-17">
-                    <button class="login100-form-btn">
-                        Sign up
+                    <button class="login100-form-btn" th:text="#{registration.signUp}">
                     </button>
                 </div>
 
                 <div class="w-full text-center p-t-55">
-						<span class="txt2">
-							Already have an account?
+						<span class="txt2" th:text="#{registration.haveAnAccount}">
+
 						</span>
 
-                    <a href="/login" class="txt2 bo1">
-                        Sign in
+                    <a href="/login" class="txt2 bo1" th:text="#{app.login}">
                     </a>
                 </div>
             </form>
