@@ -27,7 +27,7 @@ public class TopicController {
         model.addAttribute("topics", topics);
         model.addAttribute("currentPage", page);
         model.addAttribute("pages", topics.getTotalPages());
-        return  "redirect:/topic";
+        return  "topic";
     }
 
 
