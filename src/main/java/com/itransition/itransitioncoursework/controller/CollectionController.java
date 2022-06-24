@@ -3,6 +3,7 @@ package com.itransition.itransitioncoursework.controller;
 
 import com.itransition.itransitioncoursework.dto.CollectionDto;
 import com.itransition.itransitioncoursework.service.CollectionService;
+import com.itransition.itransitioncoursework.service.TopicService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -22,7 +23,7 @@ import javax.validation.Valid;
 @Slf4j
 public class CollectionController {
 
-
+    private final TopicService topicService;
     private final CollectionService collectionService;
 
 
@@ -34,6 +35,7 @@ public class CollectionController {
     @GetMapping
     public String getCollectionForm(Model model) {
         model.addAttribute("collection", new CollectionDto());
+        model.addAttribute("topics",topicService.getAllTopics());
         return "collection";
     }
 
@@ -65,7 +67,7 @@ public class CollectionController {
 //        }
 //
 //        System.out.println(collection);
-        collectionService.saveCollection(collection,image);
+        collectionService.saveCollection(collection, image);
         return "collection";
     }
 }

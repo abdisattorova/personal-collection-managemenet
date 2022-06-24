@@ -44,7 +44,8 @@ body {
     color: #212529;
     background-color: #fff;
     -webkit-text-size-adjust: 100%;
-    -webkit-tap-highlight-color: transparent
+    -webkit-tap-highlight-color: transparent;
+    /*overflow: hidden;*/
 }
 
 [tabindex="-1"]:focus:not(:focus-visible) {
@@ -91,7 +92,7 @@ hr:not([size]) {
 }
 
 .h3, h3 {
-    font-size: calc(1.3rem + .6vw)
+    font-size: 1.5rem;
 }
 
 @media (min-width: 1200px) {
@@ -138,9 +139,9 @@ address {
     line-height: inherit
 }
 
-ol, ul {
-    padding-left: 2rem
-}
+/*ol, ul {*/
+/*    padding-left: 2rem*/
+/*}*/
 
 dl, ol, ul {
     margin-top: 0;
@@ -282,7 +283,8 @@ tbody, td, tfoot, th, thead, tr {
 }
 
 label {
-    display: inline-block
+    display: inline-block;
+    margin-top: 5px;
 }
 
 button {
@@ -566,7 +568,7 @@ progress {
     padding-right: calc(var(--bs-gutter-x) / 2);
     padding-left: calc(var(--bs-gutter-x) / 2);
     margin-right: auto;
-    margin-left: auto
+    margin-left: auto;
 }
 
 @media (min-width: 576px) {
@@ -1472,7 +1474,7 @@ progress {
 
     .col-xl-2 {
         flex: 0 0 auto;
-        width: 16.666667%
+        width: 20%
     }
 
     .col-xl-3 {
@@ -2231,7 +2233,9 @@ progress {
     display: block;
     min-height: 1.5rem;
     padding-left: 1.5em;
-    margin-bottom: .125rem
+    margin-right: 30px;
+    display: flex;
+    align-items: center;
 }
 
 .form-check .form-check-input {
@@ -3879,7 +3883,7 @@ progress {
 
 .nav-link {
     display: block;
-    padding: .5rem 1rem;
+    padding: 0.2rem 1rem;
     text-decoration: none;
     transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out
 }
@@ -5440,7 +5444,7 @@ progress {
 
 @media (min-width: 992px) {
     .modal-lg, .modal-xl {
-        max-width: 800px
+        max-width: 500px
     }
 }
 
@@ -8592,7 +8596,7 @@ progress {
     }
 
     .p-md-5 {
-        padding: 3rem !important
+        padding: 1rem 2rem !important
     }
 
     .px-md-0 {

@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.PackagePrivate;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -21,5 +22,11 @@ public class Topic extends AbsEntity {
 
     String name;
 
+    @Column(columnDefinition = "boolean default false")
+    boolean isDeleted;
+
+    public Topic(String name) {
+        this.name = name;
+    }
 }
 

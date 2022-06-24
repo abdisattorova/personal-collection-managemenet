@@ -39,29 +39,10 @@
     <script src="/dark-mode-switch.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
-    <script>
-        async function getTopics() {
-            await fetch("/api/topic")
-                .then(function (response) {
-                        // console.log("RESPONSE KELDI!!!")
-                        if (response.ok) {
-                            response.json().then(res => {
-                                console.log(res)
-                                $("#topicId").empty()
-                                res.map(topic => {
-                                    let valueName = topic.name
-                                    $("#topicId").append(
-                                        "<option value=" + topic.id + ">" + valueName + "</option>"
-                                    );
-                                })
-                            })
-                        }
-                    }
-                )
-        }
-    </script>
 </head>
-<body onload="getTopics()">
+<body>
+<!--        onload="getTopics()"-->
+
 <!-- Page Loader -->
 <div id="loader-wrapper">
     <div id="loader"></div>
@@ -164,12 +145,13 @@
                 </div>
                 <div class="wrap-input100">
                     <select
-                            onload="getTopics()"
                             class="select"
                             id="topicId"
                             name="topicId"
                             th:field="*{topicId}"
-                    ></select>
+                    >
+                        <option th:each="topic : ${topics}" th:value="${topic.id}" th:text="${topic.name}"></option>
+                    </select>
                     <span class="focus-input100"></span>
                 </div>
 
