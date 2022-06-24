@@ -27,7 +27,7 @@ public class TopicController {
         model.addAttribute("topics", topics);
         model.addAttribute("currentPage", page);
         model.addAttribute("pages", topics.getTotalPages());
-        return "topic";
+        return  "redirect:/topic";
     }
 
 
@@ -41,7 +41,7 @@ public class TopicController {
             return "redirect:/topic?empty";
         }
         topicService.addNewTopic(topic, model, currentPage);
-        return "topic";
+        return "redirect:/topic";
     }
 
 
@@ -50,7 +50,7 @@ public class TopicController {
                               Model model,
                               @PathVariable Integer page) {
         topicService.deleteTopic(id, model, page);
-        return "topic";
+        return  "redirect:/topic";
     }
 
     @GetMapping("/archive/{id}/currentPage/{page}")
@@ -58,7 +58,7 @@ public class TopicController {
                                Model model,
                                @PathVariable Integer page) {
         topicService.archive(id, model, page);
-        return "topic";
+        return  "redirect:/topic";
     }
 
     @GetMapping("/unarchive/{id}/currentPage/{page}")
@@ -66,7 +66,7 @@ public class TopicController {
                                  Model model,
                                  @PathVariable Integer page) {
         topicService.unarchive(id, model, page);
-        return "topic";
+        return  "redirect:/topic";
     }
 
 }
