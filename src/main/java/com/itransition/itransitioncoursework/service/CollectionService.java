@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -58,6 +59,10 @@ public class CollectionService {
         collectionRepository.save(collection);
 
         List<CustomFieldDto> customFieldDtos = collectionDto.getCustomFields();
+
+       List<Integer> integers = new ArrayList<>();
+
+        long count = integers.stream().filter(integer -> integer==8).count();
 
         for (CustomFieldDto customFieldDto : customFieldDtos) {
             customFieldRepository.save(new CustomField(customFieldDto.getFieldName(),

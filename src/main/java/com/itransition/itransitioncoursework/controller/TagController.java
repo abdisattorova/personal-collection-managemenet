@@ -1,15 +1,15 @@
 package com.itransition.itransitioncoursework.controller;
 //Sevinch Abdisattorova 06/21/2022 4:58 PM
 
+import com.itransition.itransitioncoursework.entity.Tag;
 import com.itransition.itransitioncoursework.service.TagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
-import javax.accessibility.AccessibleStreamable;
+import java.util.List;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/tag")
@@ -19,18 +19,24 @@ public class TagController {
     private final TagService tagService;
 
     @GetMapping
-    public String getTagForm() {
+    public String getTagForm(Model model) {
+        List<Tag> tagList = tagService.getAll();
+        model.addAttribute("tags", tagList);
         return "tag";
     }
 
     @PostMapping
-    public String addTag(String tag) {
-        tagService.addNewTag(tag);
-        // TODO: 06/21/2022 return success page 
-        return "collection";
+    public String addTag(Tag tag, Model model) {
+        boolean isAdded = tagService.addNewTag(tag, model);
+        if (tag.getId()!=null)
+            return isAdded ? "redirect:/tag?saved" : "redirect:/tag?exists";
+        else
+            return isAdded ? "redirect:/tag?edited" : "redirect:/tag?exists";
     }
 
-//    @PutMapping
-//    public AccessibleStreamable
+    @GetMapping("/delete/{id}")
+    public String deleteTag(@PathVariable UUID id,Model model){
+        return tagService.deleteTag(id,model);
+    }
 
 }

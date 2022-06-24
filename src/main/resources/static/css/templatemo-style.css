@@ -6,6 +6,15 @@ https://templatemo.com/tm-556-catalog-z
 
 */
 
+.select__lang {
+    background-color: #f7f7f7;
+    padding: 3px 18px;
+    border: 0.5px solid rgba(38, 38, 38, 0.82);
+    border-radius: 1.5px;
+    font-size: 18px;
+    color: #0f1531;
+}
+
 #loader-wrapper {
     position: fixed;
     top: 0;
