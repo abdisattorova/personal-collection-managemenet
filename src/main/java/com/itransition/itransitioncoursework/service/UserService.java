@@ -8,6 +8,10 @@ import com.itransition.itransitioncoursework.mapper.UserMapper;
 import com.itransition.itransitioncoursework.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -32,6 +36,7 @@ import java.util.Map;
 @Service
 public class UserService implements UserDetailsService {
 
+
     private final UserMapper userMapper;
 
     private final UserRepository userRepository;
@@ -39,6 +44,9 @@ public class UserService implements UserDetailsService {
     private final BCryptPasswordEncoder passwordEncoder;
 
     private final OAuth2AuthorizedClientService authorizedClientService;
+
+    @Value("${USERS_SIZE}")
+    private Integer size;
 
 
     @Override
@@ -115,5 +123,12 @@ public class UserService implements UserDetailsService {
         }
 
         return "redirect:/";
+    }
+
+
+    public Page<User> getUsersByPage(Integer page) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<User> users = userRepository.findAll(pageable);
+        return users;
     }
 }

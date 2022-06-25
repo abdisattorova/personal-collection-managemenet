@@ -38,10 +38,10 @@ public class TopicController {
         if (topic.getName().equals("")){
             model.addAttribute("success",false);
             model.addAttribute("message","Topic can't be empty");
-            return "redirect:/topic?empty";
+            return "topic";
         }
         topicService.addNewTopic(topic, model, currentPage);
-        return "redirect:/topic";
+        return "topic";
     }
 
 
@@ -50,7 +50,7 @@ public class TopicController {
                               Model model,
                               @PathVariable Integer page) {
         topicService.deleteTopic(id, model, page);
-        return  "redirect:/topic";
+        return  "topic";
     }
 
     @GetMapping("/archive/{id}/currentPage/{page}")
@@ -66,7 +66,7 @@ public class TopicController {
                                  Model model,
                                  @PathVariable Integer page) {
         topicService.unarchive(id, model, page);
-        return  "redirect:/topic";
+        return  "topic";
     }
 
 }
