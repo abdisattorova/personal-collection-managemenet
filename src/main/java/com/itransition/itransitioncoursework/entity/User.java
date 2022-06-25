@@ -49,7 +49,7 @@ public class User extends AbsEntity implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
-//        authorities.add(new SimpleGrantedAuthority(role.getRoleEnum().toString()));
+        authorities.add(new SimpleGrantedAuthority(role.getRoleEnum().toString()));
         return authorities;
     }
 

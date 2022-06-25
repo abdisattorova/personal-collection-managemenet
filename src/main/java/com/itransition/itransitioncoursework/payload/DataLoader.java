@@ -34,7 +34,7 @@ public class DataLoader implements CommandLineRunner {
                     "abdisattarovasevinch5@gmail.com",
                     encoder.encode("1"),
                     false,
-                    new Role(RoleEnum.SUPER_ADMIN)
+                    new Role(RoleEnum.ADMIN)
             ));
 
             userRepository.save(new User("Zuhra",
