@@ -1,10 +1,10 @@
 package com.itransition.itransitioncoursework.service;
-//Sevinch Abdisattorova 06/15/2022 11:03 AM
+//Sevinch Abdisattorova 06/25/2022 3:09 PM
 
 
-import com.itransition.itransitioncoursework.dto.RegistrationDto;
+import com.itransition.itransitioncoursework.entity.Role;
 import com.itransition.itransitioncoursework.entity.User;
-import com.itransition.itransitioncoursework.mapper.UserMapper;
+import com.itransition.itransitioncoursework.entity.enums.RoleEnum;
 import com.itransition.itransitioncoursework.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,123 +12,123 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
+@Service
 @RequiredArgsConstructor
 @Slf4j
-@Service
-public class UserService implements UserDetailsService {
-
-
-    private final UserMapper userMapper;
+public class UserService {
 
     private final UserRepository userRepository;
 
-    private final BCryptPasswordEncoder passwordEncoder;
-
-    private final OAuth2AuthorizedClientService authorizedClientService;
-
     @Value("${USERS_SIZE}")
     private Integer size;
-
-
-    @Override
-    public UserDetails loadUserByUsername(String email)
-            throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email);
-        if (user == null) {
-            throw new UsernameNotFoundException("Email or Password is incorrect. Try again");
-        }
-        return user;
-    }
-
-
-    public boolean existsByEmail(String email) {
-        return userRepository.existsByEmail(email);
-    }
-
-
-    public void save(RegistrationDto registrationDto) {
-        registrationDto.setPassword(passwordEncoder.encode(registrationDto.getPassword()));
-        User user = userMapper.userRegistrationDtoToUser(registrationDto);
-        userRepository.save(user);
-    }
-
-
-    public String oauthSuccess(OAuth2AuthenticationToken authentication) {
-
-        OAuth2AuthorizedClient client = authorizedClientService
-                .loadAuthorizedClient(
-                        authentication.getAuthorizedClientRegistrationId(),
-                        authentication.getName());
-
-        String userInfoEndpointUri = client
-                .getClientRegistration()
-                .getProviderDetails()
-                .getUserInfoEndpoint()
-                .getUri();
-
-        if (!StringUtils.isEmpty(userInfoEndpointUri)) {
-
-            RestTemplate restTemplate = new RestTemplate();
-
-            HttpHeaders headers = new HttpHeaders();
-
-            headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + client.getAccessToken()
-                    .getTokenValue());
-
-            HttpEntity<?> entity = new HttpEntity<>("", headers);
-
-            ResponseEntity<Map> response = restTemplate.exchange(
-                    userInfoEndpointUri,
-                    HttpMethod.GET,
-                    entity,
-                    Map.class);
-
-            Map userAttributes = response.getBody(); // user information
-
-            assert userAttributes != null;
-            String name = (String) userAttributes.get("name");
-            String email = (String) userAttributes.get("email");
-            String[] s = name.split(" ");
-            User userByEmail = userRepository.findByEmail(email);
-            if (userByEmail == null) {
-                User user = new
-                        User(s[0], s[1], email);
-                userByEmail = userRepository.save(user);
-            }
-
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userByEmail,
-                    null,
-                    userByEmail.getAuthorities());
-
-            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-        }
-
-        return "redirect:/";
-    }
 
 
     public Page<User> getUsersByPage(Integer page) {
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<User> users = userRepository.findAll(pageable);
         return users;
+    }
+
+
+    public String deleteUser(UUID id, RedirectAttributes model, Integer page) {
+        try {
+            userRepository.deleteById(id);
+            if (page > countAllPages()) {
+                page--;
+            }
+            model.addFlashAttribute("success", true);
+            model.addFlashAttribute("message", "User successfully deleted!");
+        } catch (Exception e) {
+            model.addFlashAttribute("success", false);
+            model.addFlashAttribute("message", "User could not be deleted!");
+        }
+        return "redirect:/admin/users?page=" + page;
+    }
+
+
+    public String blockUser(UUID id, RedirectAttributes model, Integer page) {
+
+        Optional<User> byId = userRepository.findById(id);
+        if (byId.isPresent()) {
+            User user = byId.get();
+            user.setIsBlocked(true);
+            userRepository.save(user);
+            model.addFlashAttribute("success", true);
+            model.addFlashAttribute("message", "User successfully blocked!");
+            return "redirect:/admin/users?page=" + countAllPages();
+        } else {
+            model.addFlashAttribute("success", false);
+            model.addFlashAttribute("message", "User not found!");
+            return "redirect:/admin/users?page=" + page;
+        }
+    }
+
+
+    public String unblockUser(UUID id, RedirectAttributes model, Integer page) {
+
+
+        Optional<User> byId = userRepository.findById(id);
+        if (byId.isPresent()) {
+            User user = byId.get();
+            user.setIsBlocked(false);
+            userRepository.save(user);
+            model.addFlashAttribute("success", true);
+            model.addFlashAttribute("message", "User successfully unblocked!");
+            return "redirect:/admin/users?page=" + countAllPages();
+        } else {
+            model.addFlashAttribute("success", false);
+            model.addFlashAttribute("message", "User not found!");
+            return "redirect:/admin/users?page=" + page;
+        }
+
+    }
+
+
+    public String promoteUserToAdmin(UUID id, RedirectAttributes model, Integer page) {
+        Optional<User> byId = userRepository.findById(id);
+        if (byId.isPresent()) {
+            User user = byId.get();
+            user.setRole(new Role(RoleEnum.ADMIN));
+            userRepository.save(user);
+            model.addFlashAttribute("success", true);
+            model.addFlashAttribute("message", "User successfully promoted to admin!");
+            return "redirect:/admin/users?page=" + countAllPages();
+        } else {
+            model.addFlashAttribute("success", false);
+            model.addFlashAttribute("message", "User not found!");
+            return "redirect:/admin/users?page=" + page;
+        }
+    }
+
+    public String removeUserFromAdmin(UUID id, RedirectAttributes model, Integer page) {
+        Optional<User> byId = userRepository.findById(id);
+        if (byId.isPresent()) {
+            User user = byId.get();
+            user.setRole(new Role(RoleEnum.USER));
+            userRepository.save(user);
+            model.addFlashAttribute("success", true);
+            model.addFlashAttribute("message", "User successfully removed from admin!");
+            return "redirect:/admin/users?page=" + countAllPages();
+        } else {
+            model.addFlashAttribute("success", false);
+            model.addFlashAttribute("message", "User not found!");
+            return "redirect:/admin/users?page=" + page;
+        }
+    }
+
+
+    private int countAllPages() {
+        Integer count = userRepository.countAll();
+        int pages = count / size;
+        if (count % size > 0) {
+            pages += 1;
+        }
+        return pages;
     }
 }

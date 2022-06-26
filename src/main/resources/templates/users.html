@@ -221,7 +221,7 @@
                                         <p th:text="${message}"></p>
                                     </div>
                                 </div>
-                                <div th:if="${param.empty}">
+                                <div th:if="${empty}">
                                     <div class="alert-error mb-2" style="background-color: red">
                                         <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
                                         Topic can't be empty!
@@ -229,8 +229,6 @@
                                 </div>
                             </div>
 
-
-                            <!-- Modal -->
                             <div class="table-responsive">
                                 <table class="table table-bordered">
                                     <thead>
@@ -251,39 +249,184 @@
                                         <td th:text="${user.lastName}"></td>
                                         <td th:text="${user.email}"></td>
                                         <td>
-                                            <a th:href="@{'/admin/users/delete/'+${user.id}+'/currentPage/'+${currentPage}}">
-                                                <button type="button" class="btn btn-danger"
-                                                ><i class="ti-trash"></i>
-                                                </button>
-                                            </a>
-                                            <a th:if="${user.isBlocked}"
-                                               th:href="@{'/admin/users/unblock/'+${user.id}+'/currentPage/'+${currentPage}}">
-                                                <button type="button" class="btn btn-warning">
-                                                    <i class="ti-lock"></i>
-                                                </button>
-                                            </a>
-                                            <a th:unless="${user.isBlocked}"
-                                               th:href="@{'/admin/users/block/'+${user.id}+'/currentPage/'+${currentPage}}">
-                                                <button type="button" class="btn btn-danger">
-                                                    <i class="ti-unlock"></i>
-                                                </button>
-                                            </a>
+                                            <button type="button" class="btn btn-danger"
+                                                    data-bs-toggle="modal"
+                                                    th:attr="data-bs-target='#deleteUser'+${user.id}">
+                                                <i class="ti-trash"></i>
+                                            </button>
 
-                                            <a th:if="${user.role.roleEnum.name()=='USER'}"
-                                               th:href="@{'/admin/users/promoteToAdmin/'+${user.id}+'/currentPage/'+${currentPage}}">
-                                                <button type="button" class="btn btn-primary"
-                                                        th:text="#{users.promoteToAdmin}">
-                                                </button>
-                                            </a>
-                                            <a th:if="${user.role.roleEnum.name()=='ADMIN'}"
-                                               th:href="@{'/admin/users/removeFromAdmin/'+${user.id}+'/currentPage/'+${currentPage}}">
-                                                <button type="button" class="btn btn-warning"
-                                                        th:text="#{users.removeFromAdmin}">
-                                                </button>
-                                            </a>
+                                            <button th:if="${user.isBlocked}" type="button" class="btn btn-warning "
+                                                    data-bs-toggle="modal"
+                                                    th:attr="data-bs-target='#unblockUser'+${user.id}">
+                                                <i class="ti-unlock"></i>
+                                            </button>
 
+                                            <button th:unless="${user.isBlocked}" type="button" class="btn btn-danger"
+                                                    data-bs-toggle="modal"
+                                                    th:attr="data-bs-target='#blockUser'+${user.id}">
+                                                <i class="ti-lock"></i>
+                                            </button>
+
+                                            <button th:if="${user.role.roleEnum.name()=='USER'}" type="button"
+                                                    class="btn btn-primary"
+                                                    data-bs-toggle="modal"
+                                                    th:attr="data-bs-target='#promoteUser'+${user.id}"
+                                                    th:text="#{users.promoteToAdmin}">
+                                            </button>
+
+                                            <button th:unless="${user.role.roleEnum.name()=='USER'}" type="button"
+                                                    class="btn btn-danger"
+                                                    data-bs-toggle="modal"
+                                                    th:attr="data-bs-target='#removeUser'+${user.id}"
+                                                    th:text="#{users.removeFromAdmin}">
+                                            </button>
                                         </td>
 
+                                        <!-- DELETE MODAL -->
+                                        <div class="modal fade" th:id="'deleteUser'+${user.id}" tabindex="-1"
+                                             aria-hidden="true">
+                                            <div class="modal-dialog modal-lg modal-simple modal-edit-user">
+                                                <div class="modal-content p-3 p-md-5">
+                                                    <div class="modal-body">
+                                                        <form method="post" th:action="@{/admin/users/delete}">
+                                                            <input hidden th:value="${user.id}" name="id">
+                                                            <input hidden th:value="${currentPage}" name="page">
+                                                            <div class="row">
+                                                                <div class="col-12 ">
+                                                                    <h5 th:text="'Are you sure to delete '+ ${user.firstName}+' ?'"></h5>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary"
+                                                                        data-bs-dismiss="modal"
+                                                                        th:text="#{actions.cancel}">
+                                                                </button>
+                                                                <button type="submit" class="btn btn-primary"
+                                                                        th:text="#{actions.delete}">
+                                                                </button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <!-- BLOCK MODAL -->
+                                        <div class="modal fade" th:id="'blockUser'+${user.id}" tabindex="-1"
+                                             aria-hidden="true">
+                                            <div class="modal-dialog modal-lg modal-simple modal-edit-user">
+                                                <div class="modal-content p-3 p-md-5">
+                                                    <div class="modal-body">
+                                                        <form method="post" th:action="@{/admin/users/block}">
+                                                            <input hidden th:value="${user.id}" name="id">
+                                                            <input hidden th:value="${currentPage}" name="page">
+                                                            <div class="row">
+                                                                <div class="col-12 ">
+                                                                    <h5 th:text="'Are you sure to block '+ ${user.firstName}+' ?'"></h5>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary"
+                                                                        data-bs-dismiss="modal"
+                                                                        th:text="#{actions.cancel}">
+                                                                </button>
+                                                                <button type="submit" class="btn btn-primary"
+                                                                        th:text="#{users.block}">
+                                                                </button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- UNBLOCK MODAL -->
+                                        <div class="modal fade" th:id="'unblockUser'+${user.id}" tabindex="-1"
+                                             aria-hidden="true">
+                                            <div class="modal-dialog modal-lg modal-simple modal-edit-user">
+                                                <div class="modal-content p-3 p-md-5">
+                                                    <div class="modal-body">
+                                                        <form method="post" th:action="@{/admin/users/unblock}">
+                                                            <input hidden th:value="${user.id}" name="id">
+                                                            <input hidden th:value="${currentPage}" name="page">
+                                                            <div class="row">
+                                                                <div class="col-12 ">
+                                                                    <h5 th:text="'Are you sure to unblock '+ ${user.firstName}+' ?'"></h5>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary"
+                                                                        data-bs-dismiss="modal"
+                                                                        th:text="#{actions.cancel}">
+                                                                </button>
+                                                                <button type="submit" class="btn btn-primary"
+                                                                        th:text="#{users.unblock}">
+                                                                </button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- PROMOTE TO USER MODAL -->
+                                        <div class="modal fade" th:id="'promoteUser'+${user.id}" tabindex="-1"
+                                             aria-hidden="true">
+                                            <div class="modal-dialog modal-lg modal-simple modal-edit-user">
+                                                <div class="modal-content p-3 p-md-5">
+                                                    <div class="modal-body">
+                                                        <form method="post" th:action="@{/admin/users/promote}">
+                                                            <input hidden th:value="${user.id}" name="id">
+                                                            <input hidden th:value="${currentPage}" name="page">
+                                                            <div class="row">
+                                                                <div class="col-12 ">
+                                                                    <h5 th:text="'Are you sure to promote '+ ${user.firstName}+' to admin ?'"></h5>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary"
+                                                                        data-bs-dismiss="modal"
+                                                                        th:text="#{actions.cancel}">
+                                                                </button>
+                                                                <button type="submit" class="btn btn-primary"
+                                                                        th:text="#{users.promoteToAdmin}">
+                                                                </button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- REMOVE FROM ADMIN MODAL -->
+                                        <div class="modal fade" th:id="'removeUser'+${user.id}" tabindex="-1"
+                                             aria-hidden="true">
+                                            <div class="modal-dialog modal-lg modal-simple modal-edit-user">
+                                                <div class="modal-content p-3 p-md-5">
+                                                    <div class="modal-body">
+                                                        <form method="post" th:action="@{/admin/users/remove}">
+                                                            <input hidden th:value="${user.id}" name="id">
+                                                            <input hidden th:value="${currentPage}" name="page">
+                                                            <div class="row">
+                                                                <div class="col-12 ">
+                                                                    <h5 th:text="'Are you sure to remove '+ ${user.firstName}+' from admins ?'"></h5>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary"
+                                                                        data-bs-dismiss="modal"
+                                                                        th:text="#{actions.cancel}">
+                                                                </button>
+                                                                <button type="submit" class="btn btn-primary"
+                                                                        th:text="#{users.removeFromAdmin}">
+                                                                </button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </tr>
                                     </tbody>
                                 </table>

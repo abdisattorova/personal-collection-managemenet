@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.security.PermitAll;
 import javax.validation.Valid;
+import java.io.IOException;
 
 
 @Controller
@@ -50,7 +51,7 @@ public class CollectionController {
             @RequestPart CollectionDto collection,
             BindingResult bindingResult
 
-    ) {
+    ) throws IOException {
 
 //        if (bindingResult.hasErrors()) {
 //            return "redirect:/collection?imageError";

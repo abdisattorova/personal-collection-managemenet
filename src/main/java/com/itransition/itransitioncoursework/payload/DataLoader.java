@@ -44,6 +44,55 @@ public class DataLoader implements CommandLineRunner {
                     false,
                     new Role(RoleEnum.USER)));
 
+            userRepository.save(new User("Dilsabo",
+                    "Eshpulatova",
+                    "dilsabo@gmail.com",
+                    encoder.encode("1"),
+                    false,
+                    new Role(RoleEnum.USER)));
+
+            userRepository.save(new User("Bekzod",
+                    "Ganiyev",
+                    "bekzod@gmail.com",
+                    encoder.encode("1"),
+                    false,
+                    new Role(RoleEnum.USER)));
+
+            userRepository.save(new User("Zuhriddin",
+                    "Bahriddinov",
+                    "zukich@gmail.com",
+                    encoder.encode("1"),
+                    false,
+                    new Role(RoleEnum.USER)));
+
+            userRepository.save(new User("John",
+                    "Terry",
+                    "terry@gmail.com",
+                    encoder.encode("1"),
+                    false,
+                    new Role(RoleEnum.USER)));
+
+            userRepository.save(new User("Asilbek",
+                    "Abdisattorov",
+                    "asilbek@gmail.com",
+                    encoder.encode("1"),
+                    false,
+                    new Role(RoleEnum.USER)));
+
+            userRepository.save(new User("Javhar",
+                    "Abdusattorov",
+                    "javhar@gmail.com",
+                    encoder.encode("1"),
+                    false,
+                    new Role(RoleEnum.USER)));
+
+
+            userRepository.save(new User("Shohjahon",
+                    "Abdisatorov",
+                    "shohjahon@gmail.com",
+                    encoder.encode("1"),
+                    false,
+                    new Role(RoleEnum.USER)));
 
             topicRepository.save(new Topic("Books"));
             topicRepository.save(new Topic("Electronics"));

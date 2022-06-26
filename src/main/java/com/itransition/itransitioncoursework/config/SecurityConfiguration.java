@@ -1,6 +1,6 @@
 package com.itransition.itransitioncoursework.config;
 
-import com.itransition.itransitioncoursework.service.UserService;
+import com.itransition.itransitioncoursework.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,13 +18,13 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 
-    private final UserService userService;
+    private final AuthService authService;
     private final BCryptPasswordEncoder passwordEncoder;
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider auth = new DaoAuthenticationProvider();
-        auth.setUserDetailsService(userService);
+        auth.setUserDetailsService(authService);
         auth.setPasswordEncoder(passwordEncoder);
         return auth;
     }

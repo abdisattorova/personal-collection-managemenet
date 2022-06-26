@@ -293,28 +293,27 @@
                                         <td>
                                             <button type="button" class="btn btn-warning"
                                                     data-bs-toggle="modal"
-                                                    th:attr="data-bs-target='#editTopic'+${topic.id}" >
+                                                    th:attr="data-bs-target='#editTopic'+${topic.id}">
                                                 <i class="ti-pencil"></i>
                                             </button>
-                                            <a th:href="@{'/topic/delete/'+${topic.id}+'/currentPage/'+${currentPage}}">
-                                                <button type="button" class="btn btn-danger">
-                                                    <i class="ti-trash"></i>
-                                                </button>
-                                            </a>
-                                            <a th:if="${topic.isDeleted}"
-                                               th:href="@{'/topic/unarchive/'+${topic.id}+'/currentPage/'+${currentPage}}">
-                                                <button type="button" class="btn btn-primary"
-                                                        th:text="#{actions.restore}"
-                                                >
+                                            <button type="button" class="btn btn-danger"
+                                                    data-bs-toggle="modal"
+                                                    th:attr="data-bs-target='#deleteTopic'+${topic.id}">
+                                                <i class="ti-trash"></i>
+                                            </button>
 
-                                                </button>
-                                            </a>
-                                            <a th:unless="${topic.isDeleted}"
-                                               th:href="@{'/topic/archive/'+${topic.id}+'/currentPage/'+${currentPage}}">
-                                                <button type="button" class="btn btn-danger"
-                                                        th:text="#{actions.archive}">
-                                                </button>
-                                            </a>
+                                            <button th:if="${topic.isDeleted}" type="button" class="btn btn-primary"
+                                                    data-bs-toggle="modal"
+                                                    th:attr="data-bs-target='#restoreTopic'+${topic.id}"
+                                                    th:text="#{actions.restore}">
+                                            </button>
+
+                                            <button th:unless="${topic.isDeleted}" type="button" class="btn btn-danger"
+                                                    data-bs-toggle="modal"
+                                                    th:attr="data-bs-target='#archiveTopic'+${topic.id}"
+                                                    th:text="#{actions.archive}">
+                                            </button>
+
                                         </td>
 
                                         <!-- EDIT MODAL -->
@@ -361,6 +360,97 @@
                                             </div>
                                         </div>
                                         <!-- END EDIT MODAL -->
+
+                                        <!-- DELETE MODAL -->
+                                        <div class="modal fade" th:id="'deleteTopic'+${topic.id}" tabindex="-1"
+                                             aria-hidden="true">
+                                            <div class="modal-dialog modal-lg modal-simple modal-edit-user">
+                                                <div class="modal-content p-3 p-md-5">
+                                                    <div class="modal-body">
+                                                        <form th:action="@{/topic/delete}" th:method="post">
+                                                            <input hidden th:value="${topic.id}" name="id">
+                                                            <input hidden th:value="${currentPage}" name="page">
+                                                            <div class="row">
+                                                                <div class="col-12 ">
+                                                                    <h5 th:text="'Are you sure to delete '+${topic.name}+' ?'"></h5>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12 text-end mt-4">
+                                                                <button type="button" class="btn btn-secondary"
+                                                                        data-bs-dismiss="modal"
+                                                                        th:text="#{actions.cancel}">
+                                                                </button>
+                                                                <button type="submit" class="btn btn-primary ml-2"
+                                                                        th:text="#{actions.delete}">
+                                                                </button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- END DELETE MODAL -->
+
+                                        <!-- ARCHIVE MODAL -->
+                                        <div class="modal fade" th:id="'archiveTopic'+${topic.id}" tabindex="-1"
+                                             aria-hidden="true">
+                                            <div class="modal-dialog modal-lg modal-simple modal-edit-user">
+                                                <div class="modal-content p-3 p-md-5">
+                                                    <div class="modal-body">
+                                                        <form th:action="@{/topic/archive}" th:method="post">
+                                                            <input hidden th:value="${topic.id}" name="id">
+                                                            <input hidden th:value="${currentPage}" name="page">
+                                                            <div class="row">
+                                                                <div class="col-12 ">
+                                                                    <h5 th:text="'Are you sure to archive '+${topic.name}+' ?'"></h5>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12 text-end mt-4">
+                                                                <button type="button" class="btn btn-secondary"
+                                                                        data-bs-dismiss="modal"
+                                                                        th:text="#{actions.cancel}">
+                                                                </button>
+                                                                <button type="submit" class="btn btn-primary ml-2"
+                                                                        th:text="#{actions.archive}">
+                                                                </button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- END ARCHIVE MODAL -->
+
+                                        <!-- ARCHIVE MODAL -->
+                                        <div class="modal fade" th:id="'restoreTopic'+${topic.id}" tabindex="-1"
+                                             aria-hidden="true">
+                                            <div class="modal-dialog modal-lg modal-simple modal-edit-user">
+                                                <div class="modal-content p-3 p-md-5">
+                                                    <div class="modal-body">
+                                                        <form th:action="@{/topic/restore}" th:method="post">
+                                                            <input hidden th:value="${topic.id}" name="id">
+                                                            <input hidden th:value="${currentPage}" name="page">
+                                                            <div class="row">
+                                                                <div class="col-12 ">
+                                                                    <h5 th:text="'Are you sure to restore '+${topic.name}+' ?'"></h5>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12 text-end mt-4">
+                                                                <button type="button" class="btn btn-secondary"
+                                                                        data-bs-dismiss="modal"
+                                                                        th:text="#{actions.cancel}">
+                                                                </button>
+                                                                <button type="submit" class="btn btn-primary ml-2"
+                                                                        th:text="#{actions.restore}">
+                                                                </button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- END ARCHIVE MODAL -->
+
                                     </tr>
                                     </tbody>
                                 </table>

@@ -9,7 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Optional;
@@ -41,53 +41,50 @@ public class TopicService {
     }
 
 
-    public void addNewTopic(Topic topic, Model model, Integer currentPage) {
+    public String addNewTopic(Topic topic, RedirectAttributes model, Integer currentPage) {
 
         boolean isAdding = topic.getId() == null;
 
         boolean existsByName = topicRepository.existsByName(topic.getName());
         if (!existsByName) {
             topicRepository.save(topic);
-            getTopicsOfLastPage(model);
-            model.addAttribute("success", true);
+            model.addFlashAttribute("success", true);
             if (isAdding) {
-                model.addAttribute("message", "New topic successfully added!");
+                model.addFlashAttribute("message", "New topic successfully added!");
             } else {
-                model.addAttribute("message", "Topic successfully edited!");
+                model.addFlashAttribute("message", "Topic successfully edited!");
             }
+            return "redirect:/topic?page=" + countAllPages();
         } else {
-            Page<Topic> topicsByPage = getTopicsByPage(currentPage);
-            model.addAttribute("topics", topicsByPage);
-            model.addAttribute("currentPage", currentPage);
-            model.addAttribute("pages", topicsByPage.getTotalPages());
-            model.addAttribute("success", false);
+            model.addFlashAttribute("success", false);
             if (isAdding) {
-                model.addAttribute("message", "Topic already exists");
+                model.addFlashAttribute("message", "Topic already exists");
             } else {
-                model.addAttribute("message", "Topic not edited!");
+                model.addFlashAttribute("message", "Topic not edited!");
             }
+            return "redirect:/topic?page=" + currentPage;
         }
     }
 
 
-    public void deleteTopic(UUID id, Model model, Integer currentPage) {
+    public String deleteTopic(UUID id, RedirectAttributes model, Integer currentPage) {
         try {
             topicRepository.deleteById(id);
-            getTopicsOfLastPage(model);
-            model.addAttribute("success", true);
-            model.addAttribute("message", "Topic successfully deleted!");
+            model.addFlashAttribute("success", true);
+            model.addFlashAttribute("message", "Topic successfully deleted!");
+            if (currentPage > countAllPages()) {
+                currentPage--;
+            }
         } catch (Exception e) {
-            Page<Topic> topicsByPage = getTopicsByPage(currentPage);
-            model.addAttribute("topics", topicsByPage);
-            model.addAttribute("currentPage", currentPage);
-            model.addAttribute("pages", topicsByPage.getTotalPages());
-            model.addAttribute("success", false);
-            model.addAttribute("message", "You can't delete this!");
+            model.addFlashAttribute("success", false);
+            model.addFlashAttribute("message", "You can't delete this!");
         }
+        return "redirect:/topic?page=" + currentPage;
 
     }
 
-    public void archive(UUID id, Model model, Integer currentPage) {
+
+    public String archive(UUID id, RedirectAttributes model, Integer currentPage) {
         try {
             Optional<Topic> byId = topicRepository.findById(id);
             if (byId.isPresent()) {
@@ -95,21 +92,19 @@ public class TopicService {
                 topic.setDeleted(true);
                 topicRepository.save(topic);
             }
-            getTopicsOfLastPage(model);
-            model.addAttribute("success", true);
-            model.addAttribute("message", "Topic successfully archived!");
+            model.addFlashAttribute("success", true);
+            model.addFlashAttribute("message", "Topic successfully archived!");
+            return "redirect:/topic?page=" + countAllPages();
         } catch (Exception e) {
-            Page<Topic> topicsByPage = getTopicsByPage(currentPage);
-            model.addAttribute("topics", topicsByPage);
-            model.addAttribute("currentPage", currentPage);
-            model.addAttribute("pages", topicsByPage.getTotalPages());
-            model.addAttribute("success", false);
-            model.addAttribute("message", "Error!");
+            model.addFlashAttribute("success", false);
+            model.addFlashAttribute("message", "Error!");
+            return "redirect:/topic?page=" + currentPage;
         }
 
     }
 
-    public void unarchive(UUID id, Model model, Integer currentPage) {
+
+    public String unarchive(UUID id, RedirectAttributes model, Integer currentPage) {
 
         try {
             Optional<Topic> byId = topicRepository.findById(id);
@@ -118,28 +113,14 @@ public class TopicService {
                 topic.setDeleted(false);
                 topicRepository.save(topic);
             }
-            getTopicsOfLastPage(model);
-            model.addAttribute("success", true);
-            model.addAttribute("message", "Topic successfully unarchived!");
+            model.addFlashAttribute("success", true);
+            model.addFlashAttribute("message", "Topic successfully unarchived!");
+            return "redirect:/topic?page=" + countAllPages();
         } catch (Exception e) {
-            Page<Topic> topicsByPage = getTopicsByPage(currentPage);
-            model.addAttribute("topics", topicsByPage);
-            model.addAttribute("currentPage", currentPage);
-            model.addAttribute("pages", topicsByPage.getTotalPages());
-            model.addAttribute("success", false);
-            model.addAttribute("message", "Error!");
+            model.addFlashAttribute("success", false);
+            model.addFlashAttribute("message", "Error!");
+            return "redirect:/topic?page=" + currentPage;
         }
-
-    }
-
-
-    private void getTopicsOfLastPage(Model model) {
-        int count = countAllPages();
-        Page<Topic> topicsByPage = getTopicsByPage(count);
-        model.addAttribute("currentPage", count);
-        model.addAttribute("pages", topicsByPage.getTotalPages());
-        model.addAttribute("topics", topicsByPage);
-
 
     }
 
