@@ -8,8 +8,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/admin/users")
@@ -21,7 +25,7 @@ public class UserController {
 
 
     @GetMapping
-    public String getTopicForm(Model model,
+    public String getUsersPage(Model model,
                                @RequestParam(required = false, defaultValue = "1") Integer page) {
         Page<User> users = userService.getUsersByPage(page);
         model.addAttribute("users", users);
@@ -30,43 +34,39 @@ public class UserController {
         return "users";
     }
 
-//
-//    @PostMapping
-//    public String addTopic(Topic topic,
-//                           Model model,
-//                           @RequestParam Integer currentPage) {
-//        if (topic.getName().equals("")){
-//            model.addAttribute("success",false);
-//            model.addAttribute("message","Topic can't be empty");
-//            return "redirect:/topic?empty";
-//        }
-//        userService.addNewTopic(topic, model, currentPage);
-//        return "redirect:/topic";
-//    }
-//
-//
-//    @GetMapping("/delete/{id}/currentPage/{page}")
-//    public String deleteTopic(@PathVariable UUID id,
-//                              Model model,
-//                              @PathVariable Integer page) {
-//        userService.deleteTopic(id, model, page);
-//        return  "redirect:/topic";
-//    }
-//
-//    @GetMapping("/archive/{id}/currentPage/{page}")
-//    public String archiveTopic(@PathVariable UUID id,
-//                               Model model,
-//                               @PathVariable Integer page) {
-//        userService.archive(id, model, page);
-//        return  "redirect:/topic";
-//    }
-//
-//    @GetMapping("/unarchive/{id}/currentPage/{page}")
-//    public String unarchiveTopic(@PathVariable UUID id,
-//                                 Model model,
-//                                 @PathVariable Integer page) {
-//        userService.unarchive(id, model, page);
-//        return  "redirect:/topic";
-//    }
+    @PostMapping("/delete")
+    public String deleteUser(@RequestParam UUID id,
+                             RedirectAttributes model,
+                             @RequestParam Integer page) {
+        return userService.deleteUser(id, model, page);
+    }
 
+    @PostMapping("/block")
+    public String blockUser(@RequestParam UUID id,
+                            @RequestParam Integer page,
+                            RedirectAttributes model) {
+        return userService.blockUser(id, model, page);
+
+    }
+
+    @PostMapping("/unblock")
+    public String unblockUser(@RequestParam UUID id,
+                              RedirectAttributes model,
+                              @RequestParam Integer page) {
+        return userService.unblockUser(id, model, page);
+    }
+
+    @PostMapping("/promote")
+    public String promoteUserToAdmin(@RequestParam UUID id,
+                              RedirectAttributes model,
+                              @RequestParam Integer page) {
+        return userService.promoteUserToAdmin(id, model, page);
+    }
+
+    @PostMapping("/remove")
+    public String removeUserFromAdmin(@RequestParam UUID id,
+                                     RedirectAttributes model,
+                                     @RequestParam Integer page) {
+        return userService.removeUserFromAdmin(id, model, page);
+    }
 }

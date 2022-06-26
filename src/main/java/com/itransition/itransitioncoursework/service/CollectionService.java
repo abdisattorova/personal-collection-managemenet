@@ -13,45 +13,39 @@ import com.itransition.itransitioncoursework.repository.CollectionRepository;
 import com.itransition.itransitioncoursework.repository.CustomFieldRepository;
 import com.itransition.itransitioncoursework.repository.TopicRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CollectionService {
 
 
     private final TopicRepository topicRepository;
 
-    private final Cloudinary cloudinary;
+    @Autowired
+    Cloudinary cloudinary;
 
     private final CollectionRepository collectionRepository;
 
     private final CustomFieldRepository customFieldRepository;
 
 
-    public void saveCollection(CollectionDto collectionDto, MultipartFile image) {
+    public void saveCollection(CollectionDto collectionDto, MultipartFile image) throws IOException {
 
         Collection collection = new Collection();
         collection.setName(collectionDto.getName());
         collection.setDescription(collectionDto.getDescription());
 
-        try {
-            File uploadedFile = convertMultiPartToFile(image);
-            Map uploadResult = cloudinary.uploader().upload(uploadedFile, ObjectUtils.emptyMap());
-            String url = uploadResult.get("url").toString();
-            collection.setImageUrl(url);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        collection.setImageUrl(uploadImage(image));
 
         Optional<Topic> topic = topicRepository.findById(collectionDto.getTopicId());
         collection.setTopic(topic.get());
@@ -60,9 +54,9 @@ public class CollectionService {
 
         List<CustomFieldDto> customFieldDtos = collectionDto.getCustomFields();
 
-       List<Integer> integers = new ArrayList<>();
+        List<Integer> integers = new ArrayList<>();
 
-        long count = integers.stream().filter(integer -> integer==8).count();
+        long count = integers.stream().filter(integer -> integer == 8).count();
 
         for (CustomFieldDto customFieldDto : customFieldDtos) {
             customFieldRepository.save(new CustomField(customFieldDto.getFieldName(),
@@ -73,14 +67,29 @@ public class CollectionService {
     }
 
 
-    private File convertMultiPartToFile(MultipartFile file) throws IOException {
-        File convFile = new File("src/main/resources/file/" + file.getOriginalFilename());
-        FileOutputStream fos = new FileOutputStream(convFile);
-        fos.write(file.getBytes());
-        fos.close();
-        return convFile;
+    private File convert(MultipartFile image) {
+        try {
+            File file = new File(Objects.requireNonNull(
+                    image.getOriginalFilename()
+            ));
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            fileOutputStream.write(image.getBytes());
+            fileOutputStream.close();
+            return file;
+        } catch (Exception e) {
+            log.info("cannot convert MultiPartFile to File {}", e.getMessage());
+            return null;
+        }
     }
 
+    private String uploadImage(MultipartFile file) throws IOException {
+        if (file.isEmpty())
+            return "https://efectocolibri.com/wp-content/uploads/2021/01/placeholder.png";
+        File image = convert(file);
+        Map uploadResult = cloudinary.uploader().upload(image, ObjectUtils.emptyMap());
+        return (String) uploadResult.get("url");
+
+    }
 }
 
 

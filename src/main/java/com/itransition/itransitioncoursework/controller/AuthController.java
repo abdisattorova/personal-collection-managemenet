@@ -1,7 +1,7 @@
 package com.itransition.itransitioncoursework.controller;
 
 import com.itransition.itransitioncoursework.dto.RegistrationDto;
-import com.itransition.itransitioncoursework.service.UserService;
+import com.itransition.itransitioncoursework.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -21,7 +21,7 @@ import javax.validation.Valid;
 public class AuthController {
 
 
-    private final UserService userService;
+    private final AuthService authService;
 
 
     @GetMapping("/login")
@@ -46,7 +46,7 @@ public class AuthController {
             return "registration";
         }
 
-        if (userService.existsByEmail(registrationDto.getEmail())) {
+        if (authService.existsByEmail(registrationDto.getEmail())) {
             result.addError(new
                     FieldError("user",
                     "email",
@@ -54,7 +54,7 @@ public class AuthController {
             return "registration";
         }
 
-        userService.save(registrationDto);
+        authService.save(registrationDto);
         return "redirect:/login?registered";
     }
 
@@ -63,7 +63,7 @@ public class AuthController {
     public String getLoginInfo(
             OAuth2AuthenticationToken authentication) {
 
-        return userService.oauthSuccess(authentication);
+        return authService.oauthSuccess(authentication);
 
     }
 }

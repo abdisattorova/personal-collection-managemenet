@@ -7,7 +7,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.UUID;
 
@@ -27,46 +31,42 @@ public class TopicController {
         model.addAttribute("topics", topics);
         model.addAttribute("currentPage", page);
         model.addAttribute("pages", topics.getTotalPages());
-        return  "topic";
-    }
-
-
-    @PostMapping
-    public String addTopic(Topic topic,
-                           Model model,
-                           @RequestParam Integer currentPage) {
-        if (topic.getName().equals("")){
-            model.addAttribute("success",false);
-            model.addAttribute("message","Topic can't be empty");
-            return "topic";
-        }
-        topicService.addNewTopic(topic, model, currentPage);
         return "topic";
     }
 
 
-    @GetMapping("/delete/{id}/currentPage/{page}")
-    public String deleteTopic(@PathVariable UUID id,
-                              Model model,
-                              @PathVariable Integer page) {
-        topicService.deleteTopic(id, model, page);
-        return  "topic";
+    @PostMapping
+    public Object addTopic(Topic topic,
+                           RedirectAttributes model,
+                           @RequestParam Integer currentPage) {
+        if (topic.getName().equals("")) {
+            model.addFlashAttribute("success", false);
+            model.addFlashAttribute("message", "Topic can't be empty");
+            return "redirect:/topic";
+        }
+        return topicService.addNewTopic(topic, model, currentPage);
     }
 
-    @GetMapping("/archive/{id}/currentPage/{page}")
-    public String archiveTopic(@PathVariable UUID id,
-                               Model model,
-                               @PathVariable Integer page) {
-        topicService.archive(id, model, page);
-        return  "redirect:/topic";
+
+    @PostMapping("/delete")
+    public String deleteTopic(@RequestParam UUID id,
+                              RedirectAttributes model,
+                              @RequestParam Integer page) {
+        return topicService.deleteTopic(id, model, page);
     }
 
-    @GetMapping("/unarchive/{id}/currentPage/{page}")
-    public String unarchiveTopic(@PathVariable UUID id,
-                                 Model model,
-                                 @PathVariable Integer page) {
-        topicService.unarchive(id, model, page);
-        return  "topic";
+    @PostMapping("/archive")
+    public String archiveTopic(@RequestParam UUID id,
+                               RedirectAttributes model,
+                               @RequestParam Integer page) {
+        return topicService.archive(id, model, page);
+    }
+
+    @PostMapping("/restore")
+    public String unarchiveTopic(@RequestParam UUID id,
+                                 RedirectAttributes model,
+                                 @RequestParam Integer page) {
+        return topicService.unarchive(id, model, page);
     }
 
 }
