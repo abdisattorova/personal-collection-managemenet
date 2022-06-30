@@ -1,4 +1,4 @@
-package com.itransition.itransitioncoursework.config;
+package com.itransition.itransitioncoursework.config.internationalization;
 //Sevinch Abdisattorova 06/22/2022 2:27 AM
 
 import org.springframework.context.annotation.Bean;

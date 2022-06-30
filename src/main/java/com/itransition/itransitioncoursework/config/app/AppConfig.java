@@ -1,4 +1,4 @@
-package com.itransition.itransitioncoursework.config;
+package com.itransition.itransitioncoursework.config.app;
 //Sevinch Abdisattorova 06/16/2022 9:57 AM
 
 

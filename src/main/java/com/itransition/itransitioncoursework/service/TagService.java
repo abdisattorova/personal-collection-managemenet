@@ -34,6 +34,12 @@ public class TagService {
     }
 
 
+
+    public Tag getTagById(UUID id){
+        return tagRepository.findById(id).get();
+    }
+
+
     public String deleteTag(UUID id, Model model) {
         try {
             tagRepository.deleteById(id);

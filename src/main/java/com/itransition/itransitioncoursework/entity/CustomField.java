@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.PackagePrivate;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
@@ -23,11 +25,8 @@ public class CustomField extends AbsEntity {
 
     @ManyToOne
     @JoinColumn(name = "collection_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     Collection collection;
 
-    public CustomField(String name, FieldDataType fieldDataType) {
-        this.name = name;
-        this.fieldDataType = fieldDataType;
-    }
 }
 

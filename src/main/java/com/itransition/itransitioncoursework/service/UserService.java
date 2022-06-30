@@ -131,4 +131,12 @@ public class UserService {
         }
         return pages;
     }
+
+    public Integer getAdminsCount() {
+        return userRepository.countUsers();
+    }
+
+    public Integer getUsersCount() {
+        return userRepository.countAdmins();
+    }
 }

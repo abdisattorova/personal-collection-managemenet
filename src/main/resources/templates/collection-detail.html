@@ -1,17 +1,19 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catalog-Z Bootstrap 5.0 HTML Template</title>
+    <title>Catalog-Z Photo Detail Page</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="/css/templatemo-style.css">
-    <link rel="stylesheet" href="/css/darkmode.css">
 
-    <script src="/dark-mode-switch.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js">
-    </script>
+    <link rel="stylesheet" href="/css/darkmode.css">
+    <!--===============================================================================================-->
+
+    <!-- Scripts -->
+    <script src="dark-mode-switch.min.js"></script>
+
 </head>
 <body>
 <!-- Page Loader -->
@@ -82,42 +84,63 @@
     </form>
 </div>
 
-
 <div class="container-fluid tm-container-content tm-mt-60">
     <div class="row mb-4">
-        <h2 class="col-6 tm-text-primary" th:text="#{collections.top5LargestCollections}">
-        </h2>
+        <h2 class="col-12 tm-text-primary" th:text="${collection.getName()}"></h2>
     </div>
-    <div class="row tm-mb-90 tm-gallery">
-        <div class="col-xl-2 col-lg-4 col-md-6 col-sm-6 col-12 mb-5" th:each="collection : ${collections}">
-            <figure class="effect-ming tm-video-item">
-                <img th:src="${collection.getImageUrl()}" alt="Image" class="img-fluid">
-                <figcaption class="d-flex align-items-center justify-content-center">
-                    <h2 th:text="${collection.getName()}"></h2>
-                    <a th:href="'/collection/details/'+${collection.getId()}">View more</a>
-                </figcaption>
-            </figure>
-            <div class="d-flex justify-content-between tm-text-gray">
-                <span class="tm-text-gray-light" th:text="${collection.getCreatedDate()}"></span>
-                <span th:text="${collection.getItemsCount()}+' items'"></span>
-                <a th:href="'/item/'+${collection.getId()}">add items</a>
+    <div class="row tm-mb-90">
+        <div class="col-xl-8 col-lg-7 col-md-6 col-sm-12">
+            <img th:src="${collection.getImageUrl()}" alt="Image" class="img-fluid">
+        </div>
+        <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12">
+            <div class="tm-bg-gray tm-video-details">
+
+                <h2 class="col-12 tm-text-primary">Collection details</h2>
+                <div class="mb-4 d-flex flex-wrap">
+                    <div class="mr-4 mb-2">
+                        <span class="tm-text-gray-dark">Author:
+                        </span><span class="tm-text-primary" th:text="${collection.getAuthorName()}"></span>
+                    </div>
+                </div>
+
+                <div class="mr-4 mb-2">
+                        <span class="tm-text-gray-dark">Description:
+                        </span><span class="tm-text-primary" th:text="${collection.getDescription()}"></span>
+                </div>
+
+
+                <div class="mr-4 mb-2">
+                    <span class="tm-text-gray-dark">Number of items:</span>
+                    <span class="tm-text-primary" th:text="${collection.getItemsCount()}"></span>
+                </div>
+
+                <div class="mr-4 mb-2">
+                    <span class="tm-text-gray-dark mb-3">Topic:</span>
+                    <a href="#" class="tm-text-primary" th:text="${collection.getTopicName()}"></a>
+                </div>
+
+                <div class="mr-4 mb-2">
+                    <span class="tm-text-gray-dark mb-3">Created date:</span>
+                    <a href="#" class="tm-text-primary" th:text="${collection.getCreatedDate()}"></a>
+                </div>
             </div>
         </div>
     </div>
     <div class="row mb-4">
         <h2 class="col-12 tm-text-primary">
-            Latest items
+            Items of the collection
         </h2>
     </div>
     <div class="row tm-mb-90 tm-gallery">
-        <div class="col-xl-2 col-lg-4 col-md-6 col-sm-6 col-12 mb-5" th:each="item : ${latestItems}">
+        <div class="col-xl-2 col-lg-4 col-md-6 col-sm-6 col-12 mb-5" th:each="item : ${collection.getItems()}">
+
             <div class="card">
                 <figure class="effect-ming tm-video-item" th:if="${item.getImageUrl()!=null}">
                     <img th:src="${item.getImageUrl()}"
                          alt="Image" class="img-fluid">
                     <figcaption class="d-flex align-items-center justify-content-center">
                         <h2 th:text="${item.getName()}"></h2>
-                        <a th:href="'/item/details/'+${item.getId()}">View more</a>
+                        <a href="#">View more</a>
                     </figcaption>
                 </figure>
                 <figure class="effect-ming tm-video-item" th:unless="${item.getImageUrl()!=null}">
@@ -125,11 +148,12 @@
                          alt="Image" class="img-fluid">
                     <figcaption class="d-flex align-items-center justify-content-center">
                         <h2 th:text="${item.getName()}"></h2>
-                        <a th:href="'/item/details/'+${item.getId()}">View more</a>
+                        <a href="#">View more</a>
                     </figcaption>
                 </figure>
                 <div class="card-body">
-                    <div class="mr-4 mb-2 mt-4">
+                    <h5 class="card-title tm-text-gray-dark" th:text="${item.getName()}"></h5>
+                    <div class="mr-4 mb-2">
                         <span class="tm-text-gray-dark card-text">Created date:</span>
                         <a href="#" class="tm-text-primary" th:text="${item.getCreatedDate()}"></a>
                     </div>
@@ -150,9 +174,8 @@
         <div class="row">
             <div class="col-lg-6 col-md-12 col-12 px-5 mb-5">
                 <h3 class="tm-text-primary mb-4 tm-footer-title">About Catalog-Z</h3>
-                <p>Catalog-Z is free <a rel="sponsored" href="https://v5.getbootstrap.com/">Bootstrap 5</a> Alpha 2 HTML
-                    Template for video and photo websites. You can freely use this TemplateMo layout for a front-end
-                    integration with any kind of CMS website.</p>
+                <p>Integer ipsum odio, pharetra ac massa ac, pretium facilisis nibh. Donec lobortis consectetur
+                    molestie. Nullam nec diam dolor. Fusce quis viverra nunc, sit amet varius sapien.</p>
             </div>
             <div class="col-lg-3 col-md-6 col-sm-6 col-12 px-5 mb-5">
                 <h3 class="tm-text-primary mb-4 tm-footer-title">Our Links</h3>
@@ -184,22 +207,13 @@
         </div>
     </div>
 </footer>
-<script type="text/javascript">
-    $(document).ready(function () {
-        $("#locales").change(function () {
-            var selectedOption = $('#locales').val();
-            if (selectedOption != '') {
-                window.location.replace('/?lang=' + selectedOption);
-            }
-        });
-    });
-</script>
-<script src="/js/darkmode.js"></script>
+
 <script src="/js/plugins.js"></script>
 <script>
     $(window).on("load", function () {
         $('body').addClass('loaded');
     });
 </script>
+<script src="/js/darkmode.js"></script>
 </body>
 </html>

@@ -6,11 +6,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.PackagePrivate;
+import org.hibernate.ObjectDeletedException;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import java.security.Permission;
 import java.util.List;
-import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,9 +24,11 @@ public class Item extends AbsEntity {
 
     @ManyToOne
     @JoinColumn(name = "collection_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     Collection collection;
 
     @ManyToMany
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinTable(
             name = "items_tags",
             joinColumns = {@JoinColumn(name = "item_id")},
