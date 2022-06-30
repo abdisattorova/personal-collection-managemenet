@@ -1,4 +1,4 @@
-package com.itransition.itransitioncoursework.config;
+package com.itransition.itransitioncoursework.config.security;
 
 import com.itransition.itransitioncoursework.service.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -15,6 +16,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 
@@ -51,6 +53,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/video/**",
                         "/fonts/**",
                         "/fontawesome/**",
+                        "/success-oauth2",
                         "/images/**")
                 .permitAll()
                 .anyRequest()

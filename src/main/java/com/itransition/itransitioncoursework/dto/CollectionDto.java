@@ -6,10 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.PackagePrivate;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,20 +18,19 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
-@PackagePrivate
 public class CollectionDto {
 
-
     @NotNull(message = "Name can't be null!")
-    String name;
+    @Size(min = 2, message = "AXscdvfgf")
+    private String name;
 
     @NotNull(message = "Description can't be null!")
-    String description;
-
-    MultipartFile image;
+    private String description;
 
     @NotNull
-    UUID topicId;
+    private UUID topicId;
 
-    List<CustomFieldDto> customFields;
+    private MultipartFile image;
+
+    private List<CustomFieldDto> customFields;
 }

@@ -19,15 +19,16 @@ function addFileList(listFile) {
     var fileType = document.createElement('select');
     fileType.classList.add("fieldDataType");
 
-    fileType.add(new Option("Text", "TEXT"))
-    fileType.add(new Option("Text area", "TEXT_AREA"))
-    fileType.add(new Option("Boolean", "BOOLEAN"))
-    fileType.add(new Option("Number", "NUMBER"))
-    fileType.add(new Option("Date", "DATE"))
+    fileType.add(new Option("Text", "text"))
+    fileType.add(new Option("Text area", "textarea"))
+    fileType.add(new Option("Checkbox", "checkbox"))
+    fileType.add(new Option("Number", "number"))
+    fileType.add(new Option("Date", "date"))
+    fileType.add(new Option("Image", "file"))
 
 
     let fileInput = document.createElement('input');
-    fileInput.required=true
+    fileInput.required = true
     fileInput.classList.add("fieldName");
     fileInput.placeholder = "Enter field name";
 

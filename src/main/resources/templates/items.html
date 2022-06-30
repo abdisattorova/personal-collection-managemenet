@@ -29,12 +29,50 @@
     <link rel="stylesheet" type="text/css" href="/css/util.css">
     <link rel="stylesheet" type="text/css" href="/css/collection.css">
     <link rel="stylesheet" href="/css/main.css">
+    <!--===============================================================================================-->
+
+
     <link rel="stylesheet" href="/css/darkmode.css">
+    <!--===============================================================================================-->
+
+    <!-- Scripts -->
     <script src="/dark-mode-switch.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <style>
+        .selectBox {
+            width: 100%;
+            position: relative;
+        }
 
+        .selectBox select {
+            width: 100%;
+            font-weight: bold;
+        }
+
+        .overSelect {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+        }
+
+        #checkboxes {
+            display: none;
+            border: 1px #dadada solid;
+        }
+
+        #checkboxes label {
+            display: block;
+        }
+
+        #checkboxes label:hover {
+            background-color: #1e90ff;
+        }
+    </style>
 </head>
 <body>
+<!--        onload="getTopics()"-->
 
 <!-- Page Loader -->
 <div id="loader-wrapper">
@@ -85,105 +123,93 @@
 <div class="limiter">
     <div class="container-login100" style="background-image: url('/images/bg-01.jpg');">
         <div class="wrap-login100 p-l-110 p-r-110 p-t-62 p-b-33 bg-light">
+            <form class="login100-form validate-form flex-sb flex-w"
+                  id="formElem" th:action="@{/item/add}" th:method="post" enctype="multipart/form-data">
 
-            <div th:if="${param.error}">
-                <p onload="showToast('Working...')"></p>
-                <div class="alert-error mb-5">
-                                    <span class="closebtn"
-                                          onclick="this.parentElement.style.display='none';">&times;</span>
-                    Something went wrong!
-                </div>
-            </div>
 
-            <form class=" login100-form validate-form flex-sb flex-w"
-                  id="formElem" th:object="${collection}">
+                <input type="text" name="collectionId" th:value="${collectionId}" hidden>
 
                 <div class="p-t-31 p-b-9">
 						<span class="txt1">
 							Name
 						</span>
-
                 </div>
                 <div class="wrap-input100">
-                    <input
-                            id="name"
-                            required
-                            class="input100"
-                            type="text"
-                            name="name"
-                            th:field="*{name}"
-                            placeholder="Enter name of the collection here">
+                    <input id="name"
+                           required
+                           class="input100"
+                           type="text"
+                           name="name"
+                           placeholder="Enter name of the item here">
                     <span class="focus-input100"></span>
                 </div>
 
-                <div class="p-t-13 p-b-9">
-						<span class="txt1">
-							Description
-						</span>
-                    <p style="color: red"
-                       th:each="error : ${#fields.errors('description')}" th:text="${error}"></p>
-                </div>
-                <div class="wrap-input100">
-                    <textarea
-                            id="description"
-                            required
-                            class="inputTextArea"
-                            name="description"
-                            th:field="*{description}"
-                            placeholder="Enter description of the collection here"></textarea>
+                <div class="wrap-input100 mt-4">
+                    <div class="selectBox" onclick="showCheckboxes()">
+                        <select
+                                class="select">
+                            <option>Select tags</option>
+                        </select>
+                        <div class="overSelect"></div>
+                    </div>
+                    <div id="checkboxes">
+                        <input type="checkbox"
+                               style="width: 100%"
+                               name="tagIds"
+                               th:each="tag : ${tags}"
+                               th:value="${tag.id}"
+                               th:text="'#'+${tag.name}"/>
+                    </div>
                     <span class="focus-input100"></span>
                 </div>
 
-                <div class="p-t-31 p-b-9">
-						<span class="txt1">
-							Topic
-						</span>
-                    <p style="color: red"
-                       th:each="error : ${#fields.errors('topicId')}" th:text="${error}"></p>
-                </div>
-                <div class="wrap-input100">
-                    <select
-                            class="select"
-                            id="topicId"
-                            name="topicId"
-                            th:field="*{topicId}"
-                    >
-                        <option th:each="topic : ${topics}" th:value="${topic.id}" th:text="${topic.name}"></option>
-                    </select>
-                    <span class="focus-input100"></span>
-                </div>
 
-                <div class="p-t-31 p-b-9">
-                						<span class="txt1">
-                							Image
-                						</span>
-                    <p style="color: red"
-                       th:each="error : ${#fields.errors('image')}" th:text="${error}"></p>
-                </div>
-                <div class="p-t-31 p-b-9">
-                    <p class="errorMassage" style="color: red; display: none">You can only upload images</p>
-                </div>
-                <div class="wrap-input100">
-                    <input
-                            id="image"
-                            class="inputFile"
-                            type="file"
-                            name="image"
-                            accept=".jpeg"
-                            th:field="*{image}"
-                            placeholder="Upload an image of the collection">
-                    <span class="focus-input100"></span>
-                </div>
+                <div class="w-100" th:if="${customFields!=null}">
+                    <div th:each="field : ${customFields}">
+                        <div th:if="${field.getFieldDataType()} eq 'number'
+                         or ${field.getFieldDataType()} eq 'text'
+                         or ${field.getFieldDataType()} eq 'file'
+                         or ${field.getFieldDataType()} eq 'date'">
 
-                <div class="p-t-31 p-b-9" id="fields">
-						<span class="txt1">
-							Custom Fields
-						</span>
-                    <button class="file-form__btn" style="margin-left: 20px">Add a field</button>
-                </div>
-                <div class="file-form">
-                    <ul id="fieldItems" class="file-form__list">
-                    </ul>
+                            <div class="p-t-31 p-b-9">
+                                <span class="txt1" th:text="${field.getName()}">
+                                </span>
+                            </div>
+                            <div class="wrap-input100">
+                                <input
+                                        required
+                                        class="input100"
+                                        th:type="${field.getFieldDataType()}"
+                                        th:name="${field.getId()}"
+                                        th:placeholder="'Enter '+${field.getName()}">
+                                <span class="focus-input100"></span>
+                            </div>
+                        </div>
+                        <div th:if="${field.getFieldDataType()} eq 'checkbox'">
+                            <div class="wrap-input100 mt-4">
+                                <div class="form-check mt-3">
+                                    <input class="form-check-input" type="checkbox"
+                                           th:value="${field.getName()}"
+                                           th:name="${field.getId()}" id="checkbox"/>
+                                    <label class="form-check-label" for="checkbox">
+                                        [[${field.getName()}]]
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div th:if="${field.getFieldDataType()} eq 'textarea'">
+                            <div class="p-t-31 p-b-9">
+                                <span class="txt1" th:text="${field.getName()}">
+                                </span>
+                            </div>
+                            <div class="wrap-input100">
+                                <textarea th:name="${field.getId()}" class="inputTextArea" id="textarea"
+                                ></textarea>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
 
                 <div class="container-login100-form-btn m-t-17">
@@ -201,8 +227,7 @@
         <div class="row">
             <div class="col-lg-6 col-md-12 col-12 px-5 mb-5">
                 <h3 class="tm-text-primary mb-4 tm-footer-title">About Catalog-Z</h3>
-                <p>Catalog-Z is free Bootstrap 5 Alpha 2 HTML Template for video and photo websites. You can
-                    freely use
+                <p>Catalog-Z is free Bootstrap 5 Alpha 2 HTML Template for video and photo websites. You can freely use
                     this TemplateMo layout for a front-end integration with any kind of CMS website.</p>
             </div>
             <div class="col-lg-3 col-md-6 col-sm-6 col-12 px-5 mb-5">
@@ -230,8 +255,7 @@
                 Copyright 2020 Catalog-Z Company. All rights reserved.
             </div>
             <div class="col-lg-4 col-md-5 col-12 px-5 text-right">
-                Designed by <a href="https://templatemo.com" class="tm-text-gray" rel="sponsored"
-                               target="_parent">TemplateMo</a>
+                Designed by <a href="https://templatemo.com" class="tm-text-gray" rel="sponsored" target="_parent">TemplateMo</a>
             </div>
         </div>
     </div>
@@ -243,58 +267,19 @@
         $('body').addClass('loaded');
     });
 
-    formElem.onsubmit = async (e) => {
-        e.preventDefault();
-        const listItems = document.getElementsByClassName("form-list__item");
-        const customFields = [];
-        console.log(listItems.length);
-        for (let i = 0; i < listItems.length; i++) {
-            customFields.push({
-                fieldDataType: listItems[i].childNodes[0].value,
-                fieldName: listItems[i].childNodes[1].value
-            })
+    var expanded = false;
+
+    function showCheckboxes() {
+        var checkboxes = document.getElementById("checkboxes");
+        if (!expanded) {
+            checkboxes.style.display = "block";
+            expanded = true;
+        } else {
+            checkboxes.style.display = "none";
+            expanded = false;
         }
-        const name = document.getElementById('name').value;
-        const description = document.getElementById('description').value;
-        const topicId = document.getElementById('topicId').value;
-        const body = {name, description, topicId, customFields}
-        const errorMassage = document.querySelector(".errorMassage")
-        console.log(body);
-
-        let formData = new FormData();
-        // formData.append('model', JSON.stringify(body)) //sending string as requestPart
-        formData.append('collection',
-            // JSON.stringify(body))
-            new Blob([JSON.stringify(body)], {
-                type: "application/json"
-            }));
-        var input = document.querySelector('input[type="file"]')
-        // if (input.files[0].type != "image/jpeg" ||
-        //     input.files[0].type != "image/jpg" ||
-        //     input.files[0].type != "image/png") {
-        //     errorMassage.style.display = "block"
-        // } else {
-        errorMassage.style.display = "none"
-        formData.append('image', input.files[0])
-
-        for (let [name, value] of formData) {
-            console.log(`${name} = ${value}`);
-        }
-
-        let response = await fetch('/collection', {
-            method: 'POST',
-            body: formData,
-            redirect: 'follow'
-        }).then(response => {
-            console.log(response);
-            location.href = response.url;
-
-        }).catch(reason => console.log(reason));
-    // }
     }
-
 </script>
-
 <!--===============================================================================================-->
 <script src="/vendor/jquery/jquery-3.2.1.min.js"></script>
 <!--===============================================================================================-->
@@ -311,7 +296,6 @@
 <script src="/vendor/countdowntime/countdowntime.js"></script>
 <!--===============================================================================================-->
 <script src="/js/script.js"></script>
-<script src="/js/toastify.js"></script>
 <script src="/js/darkmode.js"></script>
 </body>
 </html>
