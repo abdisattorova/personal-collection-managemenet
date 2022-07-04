@@ -9,12 +9,10 @@ import com.itransition.itransitioncoursework.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -33,6 +31,13 @@ public class ItemController {
     private final ItemService itemService;
 
 
+    @ModelAttribute("currentUser")
+    public User currentUser(@AuthenticationPrincipal User currentUser) {
+        return currentUser;
+    }
+
+
+
     @GetMapping("/{collectionId}")
     public String getItemsForm(Model model, @PathVariable UUID collectionId) {
         return itemService.getItemsForm(collectionId, model);
@@ -42,6 +47,12 @@ public class ItemController {
     @GetMapping("/details/{itemId}")
     public String getItemDetails(Model model, @PathVariable UUID itemId) {
         return itemService.getItemDetails(itemId, model);
+    }
+
+
+    @GetMapping("/all")
+    public String getAllItems(Model model){
+        return itemService.getAllItems(model);
     }
 
 

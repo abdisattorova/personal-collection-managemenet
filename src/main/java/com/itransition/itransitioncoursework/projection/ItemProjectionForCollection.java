@@ -12,13 +12,16 @@ public interface ItemProjectionForCollection {
 
     UUID getId();
 
+
     String getName();
+
 
     String getCreatedDate();
 
 
     @Value("#{@fieldValueRepository.getImageUrlOfItemIfExists(target.id)}")
     String getImageUrl();
+
 
     @Value("#{@tagRepository.getTagsOfItem(target.id)}")
     List<Tag> getTags();

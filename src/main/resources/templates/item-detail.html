@@ -7,7 +7,8 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="/css/templatemo-style.css">
-
+    <link rel="stylesheet" href="/css/my-style.css">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/darkmode.css">
     <!--===============================================================================================-->
 
@@ -35,41 +36,50 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link nav-link-1 active" aria-current="page" href="/" th:text="#{app.collections}"></a>
+                    <a class="nav-link nav-link-1" aria-current="page" href="/" th:text="#{app.collections}"></a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link nav-link-2" href="videos.html">Videos</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link nav-link-3" href="about.html" th:text="#{app.about}"></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link nav-link-4" href="contact.html" th:text="#{app.contact}"></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link nav-link-1" href="/collection" th:text="#{collection.add}"></a>
-                </li>
-                <!--                <li class="nav-item">-->
-                <!--                    <button id="locales" class="choose__lang mt-2">uz</button>-->
-                <!--                </li>-->
 
-                <li style="display: inline-flex">
-                    <span class="nav-link nav-link-3" th:text="#{lang.change}"></span>
-                    <select class="select__lang" style="display: inline-flex" id="locales">
-                        <option value="" th:text="#{lang.select}"></option>
+                <li class="nav-item">
+                    <a class="nav-link nav-link-2 " href="/collections" th:text="#{collections}"></a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link nav-link-3" href="/item/all" th:text="#{items}"></a>
+                </li>
+
+                <li class="option__select">
+                    <select class="select__lang" id="locales">
+                        <option value="" th:text="#{lang.change}"></option>
                         <option value="en" th:text="#{lang.eng}"></option>
                         <option value="uz" th:text="#{lang.uz}"></option>
                     </select>
                 </li>
 
-                <li class="nav-item">
+                <div class="form-check form-switch ml-5 mt-1">
+                    <input type="checkbox" class="form-check-input" id="darkSwitch">
+                </div>
+
+                <li class="nav-item mr-2" th:if="${currentUser==null}">
                     <a class="nav-link nav-link-2" href="/login" th:text="#{app.login}"></a>
                 </li>
+
+                <li class="position-relative mt-1 mr-2" th:unless="${currentUser==null}">
+                    <div class="dropdown">
+                        <button class="dropbtn profile" th:text="${currentUser.getFirstName().charAt(0)}"></button>
+                        <div class="dropdown-content bg-light">
+                            <a class="color-white" href="/my-profile" th:text="#{my-profile}"></a>
+                            <a class="color-white" href="/admin/dashboard"
+                               th:if="${ currentUser.getRole().getRoleEnum().name()=='ADMIN'}"
+                               th:text="#{dashboard.dashboard}"></a>
+                            <a class="color-white" href="/collection" th:text="#{collection.add}"></a>
+                            <a class="color-white" href="/my-collections" th:text="#{collections.my}"></a>
+                            <a class="color-white" href="/logout" th:text="#{app.logout}"></a>
+                        </div>
+                    </div>
+                </li>
+
             </ul>
 
-            <div class="form-check form-switch" style="margin-left: 20px">
-                <input type="checkbox" class="form-check-input" id="darkSwitch">
-            </div>
         </div>
     </div>
 </nav>
@@ -84,12 +94,12 @@
     </form>
 </div>
 
-<div class="container-fluid tm-container-content tm-mt-60">
+<div class="container tm-container-content tm-mt-60">
     <div class="row mb-4">
         <h2 class="col-12 tm-text-primary" th:text="${item.getName()}"></h2>
     </div>
     <div class="row tm-mb-90">
-        <div class="col-xl-8 col-lg-7 col-md-6 col-sm-12">
+        <div class="items__detail col-xl-7 col-md-6 col-sm-12">
             <img th:if="${item.getImageUrl()==null}"
                  th:src="#{DEFAULT_PICTURE_URL}"
                  alt="Image" class="img-fluid">
@@ -97,7 +107,133 @@
                  th:src="${item.getImageUrl()}"
                  alt="Image" class="img-fluid">
         </div>
-        <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12">
+        <div class="comments tm-bg-gray col-xl-5 col-md-6 col-sm-12">
+
+            <div class="comments__container">
+                <div class="comments__body">
+                    <div class="comment__item-profile"
+                         th:each="comment : ${item.getComments()}">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="comment__item-left d-flex align-items-center">
+                                <a class="profile message__profile mr-2 mb-4"
+                                   th:text="${comment.getAuthorName().charAt(0)}"></a>
+                                <div class="profile_and_message">
+                                    <h6 class="profile__title" th:text="${comment.getAuthorName()}"></h6>
+                                    <p class="message" th:text="${comment.getContent()}"></p>
+                                </div>
+                            </div>
+
+                            <div class="comment__item-right"
+                                 th:if="${currentUser!=null && currentUser.getId()==comment.getAuthorId()}">
+                                <button
+                                        data-bs-toggle="modal"
+                                        th:attr="data-bs-target='#editComment'+${comment.getId()}"
+                                ><i class="far fa-pen dashboard__edit"></i></button>
+                                <button type="button"
+                                        data-bs-toggle="modal"
+                                        th:attr="data-bs-target='#deleteComment'+${comment.getId()}">
+                                    <i class="far fa-trash-alt dashboard__delete ml-2 mr-2"></i></button>
+                            </div>
+                        </div>
+
+                        <p class="date-time d-flex justify-content-end mt-2"
+                           th:text="${comment.getTime()} + '. '+ ${comment.getDate()}">
+                        </p>
+
+                        <div class="modal fade" th:id="'deleteComment'+${comment.getId()}" tabindex="-1"
+                             aria-hidden="true">
+                            <div class="modal-dialog modal-lg modal-simple modal-edit-user">
+                                <div class="modal-content p-3 p-md-5">
+                                    <div class="modal-body">
+                                        <form method="post" th:action="@{/comment/delete}">
+                                            <input hidden th:value="${comment.getId()}" name="id">
+                                            <div class="row">
+                                                <div class="col-12 ">
+                                                    <h5>Are you sure to delete this comment?</h5>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal"
+                                                        th:text="#{actions.cancel}">
+                                                </button>
+                                                <button type="submit" class="btn btn-primary"
+                                                        th:text="#{actions.delete}">
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- EDIT MODAL -->
+                        <div class="modal fade" th:id="'editComment'+${comment.getId()}" tabindex="-1"
+                             aria-hidden="true">
+                            <div class="modal-dialog modal-lg modal-simple modal-edit-user">
+                                <div class="modal-content p-3 p-md-5">
+                                    <div class="modal-body">
+                                        <div class="d-flex justify-content-between mb-4">
+                                            <h3 class="edit-title" th:text="#{comment.edit}"></h3>
+                                            <button type="button" class="btn-close"
+                                                    data-bs-dismiss="modal"
+                                                    aria-label="Close">
+                                            </button>
+                                        </div>
+                                        <form id="userForm" class="row g-3" method="post"
+                                              th:action="@{/comment/edit}">
+                                            <input hidden th:value="${comment.getId()}" name="id">
+                                            <input hidden th:value="${item.getId()}" name="itemId">
+                                            <div class="row">
+                                                <div class="col-12 ">
+                                                    <label class="form-label mt-3"
+                                                           th:text="#{comment}"></label>
+                                                    <input
+                                                            required
+                                                            type="text" name="content"
+                                                            class="form-control"
+                                                            th:placeholder="#{comment}"
+                                                            th:value="${comment.getContent}"/>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 text-end mt-4">
+                                                <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal"
+                                                        th:text="#{actions.cancel}">
+                                                </button>
+                                                <button type="submit" class="btn btn-primary ml-2"
+                                                        th:text="#{actions.save}">
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END EDIT MODAL -->
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="comments__footer">
+                <form class="add__comments d-flex align-items-center justify-content-between"
+                      th:action="@{/comment/add}"
+                      th:method="post">
+                    <input type="text" hidden name="itemId" th:value="${item.getId()}">
+                    <input class="form-control comments-form"
+                           th:readonly="${currentUser}==null"
+                           type="text" name="content"
+                           th:placeholder="${currentUser}==null ? 'Please log in first' : 'Enter your comment'">
+                    <button type="submit" class="btn btn-primary comments-btn"
+                            th:classappend="${currentUser}==null ? 'disabled' : ''">Send
+                    </button>
+                </form>
+            </div>
+        </div>
+
+
+        <div class="col-xl-7 col-lg-6 col-sm-12 mt-3">
             <div class="tm-bg-gray tm-video-details">
 
                 <h2 class="col-12 tm-text-primary">Item details</h2>
@@ -120,7 +256,7 @@
                     </div>
                 </div>
 
-                <div>
+                <div class="mt-3">
                     <a href="#" class="tm-text-primary mr-4 mb-2 " th:each=" tag : ${item.getTags()}"
                        th:text="'#'+${tag.name}"></a>
                 </div>
@@ -129,23 +265,29 @@
                     <span class="tm-text-gray-dark mb-3">Created date:</span>
                     <a href="#" class="tm-text-primary" th:text="${item.getCreatedDate()}"></a>
                 </div>
-                <a th:href="'/item/like/'+${item.getId()}" class="btn btn-primary" th:text="${item.getLikesCount()}+'👍'">
+                <a th:href="'/item/like/'+${item.getId()}" class="btn btn-primary"
+                   th:text="${item.getLikesCount()}+'👍'">
                 </a>
-                <a th:href="'/item/dislike/'+${item.getId()}" class="btn btn-danger" th:text="${item.getDislikesCount()}+'👎'">
+                <a th:href="'/item/dislike/'+${item.getId()}" class="btn btn-danger"
+                   th:text="${item.getDislikesCount()}+'👎'">
                 </a>
 
             </div>
+
         </div>
     </div>
+
+
     <div class="row mb-4 mt-4">
         <h2 class="col-12 tm-text-primary">
             Related items
         </h2>
     </div>
     <div class="row tm-mb-90 tm-gallery">
-        <div class="col-xl-2 col-lg-4 col-md-6 col-sm-6 col-12 mb-5" th:each="relatedItem : ${relatedItems}" th:if="${item.getId()}!=${relatedItem.getId()}">
+        <div class="col-xl-2 col-lg-4 col-md-6 col-sm-6 col-12 mb-5" th:each="relatedItem : ${relatedItems}"
+             th:if="${item.getId()}!=${relatedItem.getId()}">
 
-            <div class="card" >
+            <div class="card">
                 <figure class="effect-ming tm-video-item" th:if="${relatedItem.getImageUrl()!=null}">
                     <img th:src="${relatedItem.getImageUrl()}"
                          alt="Image" class="img-fluid">
@@ -218,6 +360,7 @@
     </div>
 </footer>
 
+<script src="/js/bootstrap.min.js"></script>
 <script src="/js/plugins.js"></script>
 <script>
     $(window).on("load", function () {

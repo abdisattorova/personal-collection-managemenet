@@ -3,10 +3,7 @@ package com.itransition.itransitioncoursework.service;
 
 import com.itransition.itransitioncoursework.dto.CollectionDto;
 import com.itransition.itransitioncoursework.dto.CustomFieldDto;
-import com.itransition.itransitioncoursework.entity.Collection;
-import com.itransition.itransitioncoursework.entity.CustomField;
-import com.itransition.itransitioncoursework.entity.FieldDataType;
-import com.itransition.itransitioncoursework.entity.Topic;
+import com.itransition.itransitioncoursework.entity.*;
 import com.itransition.itransitioncoursework.projection.CollectionDetailsProjection;
 import com.itransition.itransitioncoursework.projection.CollectionProjection;
 import com.itransition.itransitioncoursework.repository.CollectionRepository;
@@ -14,6 +11,7 @@ import com.itransition.itransitioncoursework.repository.CustomFieldRepository;
 import com.itransition.itransitioncoursework.repository.TopicRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
@@ -65,7 +63,7 @@ public class CollectionService {
 
 
     public List<CollectionProjection> getTopCollections(Model model) {
-        return collectionRepository.findTopCollections();
+        return collectionRepository.getTopCollections();
     }
 
 
@@ -80,8 +78,23 @@ public class CollectionService {
         return "collection-detail";
     }
 
+
     public Integer getCountOfAllCollections() {
         return collectionRepository.countAll();
+    }
+
+
+    public String getAllCollections(Model model) {
+        List<CollectionProjection> collections = collectionRepository.getAllCollections();
+        model.addAttribute("collections", collections);
+        return "collections";
+    }
+
+    @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
+    public String getMyCollections(Model model, User user) {
+        List<CollectionProjection> collections = collectionRepository.getMyCollections(user.getId());
+        model.addAttribute("collections", collections);
+        return "collections";
     }
 }
 

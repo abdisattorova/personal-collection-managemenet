@@ -21,6 +21,13 @@ public interface ItemRepository extends JpaRepository<Item, UUID> {
             " where i.collection_id = :collectionId")
     List<ItemProjectionForCollection> getItemsOfCollection(UUID collectionId);
 
+    @Query(nativeQuery = true, value = "select cast(i.id as varchar), " +
+            "       i.name                              as name, " +
+            "       trim(TO_CHAR(i.created_at, 'dd')) || ' ' || " +
+            "       trim(TO_CHAR(i.created_at, 'Month')) || ' ' || " +
+            "       trim(TO_CHAR(i.created_at, 'yyyy')) as createdDate " +
+            "from items i")
+    List<ItemProjectionForCollection> getAllItems();
 
     @Query(nativeQuery = true, value = "select cast(i.id as varchar), " +
             "       i.name                              as name, " +

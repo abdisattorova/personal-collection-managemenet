@@ -3,89 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catalog-Z Contact page</title>
+    <title>Catalog-Z Bootstrap 5.0 HTML Template</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="/css/templatemo-style.css">
-    <!--===============================================================================================-->
-    <link rel="icon" type="image/png" href="/images/icons/favicon.ico"/>
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="/vendor/bootstrap/css/bootstrap.min.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="/vendor/animate/animate.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="/vendor/css-hamburgers/hamburgers.min.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="/vendor/animsition/css/animsition.min.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="/vendor/select2/select2.min.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="/vendor/daterangepicker/daterangepicker.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="/css/util.css">
-    <link rel="stylesheet" type="text/css" href="/css/collection.css">
-    <link rel="stylesheet" href="/css/main.css">
-    <!--===============================================================================================-->
-
-
     <link rel="stylesheet" href="/css/darkmode.css">
-    <!--===============================================================================================-->
+    <link rel="stylesheet" href="/css/my-style.css">
 
-    <!-- Scripts -->
     <script src="/dark-mode-switch.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <style>
-        .selectBox {
-            width: 100%;
-            position: relative;
-        }
-
-        .selectBox select {
-            width: 100%;
-            font-weight: bold;
-        }
-
-        .overSelect {
-            position: absolute;
-            left: 0;
-            right: 0;
-            top: 0;
-            bottom: 0;
-        }
-
-        #checkboxes {
-            display: none;
-            border: 1px #dadada solid;
-        }
-
-        #checkboxes label {
-            display: block;
-        }
-
-        #checkboxes label:hover {
-            background-color: #1e90ff;
-        }
-    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js">
+    </script>
 </head>
 <body>
-<!--        onload="getTopics()"-->
-
 <!-- Page Loader -->
 <div id="loader-wrapper">
     <div id="loader"></div>
+
     <div class="loader-section section-left"></div>
     <div class="loader-section section-right"></div>
-</div>
 
+</div>
 <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
-        <a class="navbar-brand" href="/">
-            <i class="fas fa-film mr-2"></i>
-            Catalog-Z
+        <a class="navbar-brand" href="#" th:text="#{app.name}">
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -94,130 +34,103 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link nav-link-1" href="/">Photos</a>
+                    <a class="nav-link nav-link-1 " aria-current="page" href="/" th:text="#{app.collections}"></a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link nav-link-2" href="videos.html">Videos</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link nav-link-3" href="about.html">About</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link nav-link-4" href="contact.html">Contact</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link nav-link-1 active" aria-current="page" href="/collection">Collection</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link nav-link-2" aria-current="page" href="/login">Login</a>
-                </li>
-            </ul>
-        </div>
 
-        <div class="form-check form-switch" style="margin-left: 20px">
-            <input type="checkbox" class="form-check-input" id="darkSwitch">
+                <li class="nav-item">
+                    <a class="nav-link nav-link-2 " href="/collections" th:text="#{collections}"></a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link nav-link-3 active" href="/item/all" th:text="#{items}"></a>
+                </li>
+
+                <li class="option__select">
+                    <select class="select__lang" id="locales">
+                        <option value="" th:text="#{lang.change}"></option>
+                        <option value="en" th:text="#{lang.eng}"></option>
+                        <option value="uz" th:text="#{lang.uz}"></option>
+                    </select>
+                </li>
+
+                <div class="form-check form-switch ml-5 mt-1">
+                    <input type="checkbox" class="form-check-input" id="darkSwitch">
+                </div>
+
+                <li class="nav-item mr-2" th:if="${currentUser==null}">
+                    <a class="nav-link nav-link-2" href="/login" th:text="#{app.login}"></a>
+                </li>
+
+                <li class="position-relative mt-1 mr-2" th:unless="${currentUser==null}">
+                    <div class="dropdown">
+                        <button class="dropbtn profile" th:text="${currentUser.getFirstName().charAt(0)}"></button>
+                        <div class="dropdown-content bg-light">
+                            <a class="color-white" href="/my-profile" th:text="#{my-profile}"></a>
+                            <a class="color-white" href="/admin/dashboard"
+                               th:if="${ currentUser.getRole().getRoleEnum().name()=='ADMIN'}"
+                               th:text="#{dashboard.dashboard}"></a>
+                            <a class="color-white" href="/collection" th:text="#{collection.add}"></a>
+                            <a class="color-white" href="/my-collections" th:text="#{collections.my}"></a>
+                            <a class="color-white" href="/logout" th:text="#{app.logout}"></a>
+                        </div>
+                    </div>
+                </li>
+
+            </ul>
+
         </div>
     </div>
 </nav>
 
-<div class="limiter">
-    <div class="container-login100" style="background-image: url('/images/bg-01.jpg');">
-        <div class="wrap-login100 p-l-110 p-r-110 p-t-62 p-b-33 bg-light">
-            <form class="login100-form validate-form flex-sb flex-w"
-                  id="formElem" th:action="@{/item/add}" th:method="post" enctype="multipart/form-data">
+<div class="tm-hero d-flex justify-content-center align-items-center" data-parallax="scroll"
+     data-image-src="/images/hero.jpg">
+    <form class="d-flex tm-search-form">
+        <input class="form-control tm-search-input" type="search" th:placeholder="#{app.search}" aria-label="Search">
+        <button class="btn btn-outline-success tm-search-btn" type="submit">
+            <i class="fas fa-search"></i>
+        </button>
+    </form>
+</div>
 
 
-                <input type="text" name="collectionId" th:value="${collectionId}" hidden>
-
-                <div class="p-t-31 p-b-9">
-						<span class="txt1">
-							Name
-						</span>
-                </div>
-                <div class="wrap-input100">
-                    <input id="name"
-                           required
-                           class="input100"
-                           type="text"
-                           name="name"
-                           placeholder="Enter name of the item here">
-                    <span class="focus-input100"></span>
-                </div>
-
-                <div class="wrap-input100 mt-4">
-                    <div class="selectBox" onclick="showCheckboxes()">
-                        <select
-                                class="select">
-                            <option>Select tags</option>
-                        </select>
-                        <div class="overSelect"></div>
+<div class="container-fluid tm-container-content tm-mt-60">
+    <div class="row mb-4">
+        <h2 class="col-12 tm-text-primary">
+            Items
+        </h2>
+    </div>
+    <div class="row tm-mb-90 tm-gallery">
+        <div class="col-xl-2 col-lg-4 col-md-6 col-sm-6 col-12 mb-5" th:each="item : ${items}">
+            <div class="card">
+                <figure class="effect-ming tm-video-item" th:if="${item.getImageUrl()!=null}">
+                    <img th:src="${item.getImageUrl()}"
+                         alt="Image" class="img-fluid">
+                    <figcaption class="d-flex align-items-center justify-content-center">
+                        <h2 th:text="${item.getName()}"></h2>
+                        <a th:href="'/item/details/'+${item.getId()}">View more</a>
+                    </figcaption>
+                </figure>
+                <figure class="effect-ming tm-video-item" th:unless="${item.getImageUrl()!=null}">
+                    <img th:src="#{DEFAULT_PICTURE_URL}"
+                         alt="Image" class="img-fluid">
+                    <figcaption class="d-flex align-items-center justify-content-center">
+                        <h2 th:text="${item.getName()}"></h2>
+                        <a th:href="'/item/details/'+${item.getId()}">View more</a>
+                    </figcaption>
+                </figure>
+                <div class="card-body">
+                    <div class="mr-4 mb-2 mt-4">
+                        <span class="tm-text-gray-dark card-text">Created date:</span>
+                        <a href="#" class="tm-text-primary" th:text="${item.getCreatedDate()}"></a>
                     </div>
-                    <div id="checkboxes">
-                        <input type="checkbox"
-                               style="width: 100%"
-                               name="tagIds"
-                               th:each="tag : ${tags}"
-                               th:value="${tag.id}"
-                               th:text="'#'+${tag.name}"/>
+                    <div>
+                        <h4 class="tm-text-gray-dark mb-1">Tags</h4>
+                        <a href="#" class="tm-text-primary mr-4 mb-2 " th:each=" tag : ${item.getTags()}"
+                           th:text="${tag.name}"></a>
                     </div>
-                    <span class="focus-input100"></span>
+                    <a th:href="'/item/details/'+${item.getId()}" class="btn btn-primary">More info</a>
                 </div>
-
-
-                <div class="w-100" th:if="${customFields!=null}">
-                    <div th:each="field : ${customFields}">
-                        <div th:if="${field.getFieldDataType()} eq 'number'
-                         or ${field.getFieldDataType()} eq 'text'
-                         or ${field.getFieldDataType()} eq 'file'
-                         or ${field.getFieldDataType()} eq 'date'">
-
-                            <div class="p-t-31 p-b-9">
-                                <span class="txt1" th:text="${field.getName()}">
-                                </span>
-                            </div>
-                            <div class="wrap-input100">
-                                <input
-                                        required
-                                        class="input100"
-                                        th:type="${field.getFieldDataType()}"
-                                        th:name="${field.getId()}"
-                                        th:placeholder="'Enter '+${field.getName()}">
-                                <span class="focus-input100"></span>
-                            </div>
-                        </div>
-                        <div th:if="${field.getFieldDataType()} eq 'checkbox'">
-                            <div class="wrap-input100 mt-4">
-                                <div class="form-check mt-3">
-                                    <input class="form-check-input" type="checkbox"
-                                           th:value="${field.getName()}"
-                                           th:name="${field.getId()}" id="checkbox"/>
-                                    <label class="form-check-label" for="checkbox">
-                                        [[${field.getName()}]]
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div th:if="${field.getFieldDataType()} eq 'textarea'">
-                            <div class="p-t-31 p-b-9">
-                                <span class="txt1" th:text="${field.getName()}">
-                                </span>
-                            </div>
-                            <div class="wrap-input100">
-                                <textarea th:name="${field.getId()}" class="inputTextArea" id="textarea"
-                                ></textarea>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-                <div class="container-login100-form-btn m-t-17">
-                    <button type="submit" id="buttonSave" class="login100-form-btn">
-                        Save
-                    </button>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>
@@ -227,8 +140,9 @@
         <div class="row">
             <div class="col-lg-6 col-md-12 col-12 px-5 mb-5">
                 <h3 class="tm-text-primary mb-4 tm-footer-title">About Catalog-Z</h3>
-                <p>Catalog-Z is free Bootstrap 5 Alpha 2 HTML Template for video and photo websites. You can freely use
-                    this TemplateMo layout for a front-end integration with any kind of CMS website.</p>
+                <p>Catalog-Z is free <a rel="sponsored" href="https://v5.getbootstrap.com/">Bootstrap 5</a> Alpha 2 HTML
+                    Template for video and photo websites. You can freely use this TemplateMo layout for a front-end
+                    integration with any kind of CMS website.</p>
             </div>
             <div class="col-lg-3 col-md-6 col-sm-6 col-12 px-5 mb-5">
                 <h3 class="tm-text-primary mb-4 tm-footer-title">Our Links</h3>
@@ -260,42 +174,22 @@
         </div>
     </div>
 </footer>
-
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#locales").change(function () {
+            var selectedOption = $('#locales').val();
+            if (selectedOption != '') {
+                window.location.replace('/item/all?lang=' + selectedOption);
+            }
+        });
+    });
+</script>
+<script src="/js/darkmode.js"></script>
 <script src="/js/plugins.js"></script>
 <script>
     $(window).on("load", function () {
         $('body').addClass('loaded');
     });
-
-    var expanded = false;
-
-    function showCheckboxes() {
-        var checkboxes = document.getElementById("checkboxes");
-        if (!expanded) {
-            checkboxes.style.display = "block";
-            expanded = true;
-        } else {
-            checkboxes.style.display = "none";
-            expanded = false;
-        }
-    }
 </script>
-<!--===============================================================================================-->
-<script src="/vendor/jquery/jquery-3.2.1.min.js"></script>
-<!--===============================================================================================-->
-<script src="/vendor/animsition/js/animsition.min.js"></script>
-<!--===============================================================================================-->
-<script src="/vendor/bootstrap/js/popper.js"></script>
-<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
-<!--===============================================================================================-->
-<script src="/vendor/select2/select2.min.js"></script>
-<!--===============================================================================================-->
-<script src="/vendor/daterangepicker/moment.min.js"></script>
-<script src="/vendor/daterangepicker/daterangepicker.js"></script>
-<!--===============================================================================================-->
-<script src="/vendor/countdowntime/countdowntime.js"></script>
-<!--===============================================================================================-->
-<script src="/js/script.js"></script>
-<script src="/js/darkmode.js"></script>
 </body>
 </html>

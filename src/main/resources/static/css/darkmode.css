@@ -22,3 +22,7 @@
 [data-theme="dark"] .tm-bg-gray {
     background-color: #222;
 }
+
+[data-theme="dark"] .color-white {
+    color: white;
+}

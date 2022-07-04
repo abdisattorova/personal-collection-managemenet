@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="/css/templatemo-style.css">
+    <link rel="stylesheet" href="/css/my-style.css">
 
     <link rel="stylesheet" href="/css/darkmode.css">
     <!--===============================================================================================-->
@@ -35,41 +36,50 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link nav-link-1 active" aria-current="page" href="/" th:text="#{app.collections}"></a>
+                    <a class="nav-link nav-link-1" aria-current="page" href="/" th:text="#{app.collections}"></a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link nav-link-2" href="videos.html">Videos</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link nav-link-3" href="about.html" th:text="#{app.about}"></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link nav-link-4" href="contact.html" th:text="#{app.contact}"></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link nav-link-1" href="/collection" th:text="#{collection.add}"></a>
-                </li>
-                <!--                <li class="nav-item">-->
-                <!--                    <button id="locales" class="choose__lang mt-2">uz</button>-->
-                <!--                </li>-->
 
-                <li style="display: inline-flex">
-                    <span class="nav-link nav-link-3" th:text="#{lang.change}"></span>
-                    <select class="select__lang" style="display: inline-flex" id="locales">
-                        <option value="" th:text="#{lang.select}"></option>
+                <li class="nav-item">
+                    <a class="nav-link nav-link-2 " href="/collections" th:text="#{collections}"></a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link nav-link-3" href="/item/all" th:text="#{items}"></a>
+                </li>
+
+                <li class="option__select">
+                    <select class="select__lang" id="locales">
+                        <option value="" th:text="#{lang.change}"></option>
                         <option value="en" th:text="#{lang.eng}"></option>
                         <option value="uz" th:text="#{lang.uz}"></option>
                     </select>
                 </li>
 
-                <li class="nav-item">
+                <div class="form-check form-switch ml-5 mt-1">
+                    <input type="checkbox" class="form-check-input" id="darkSwitch">
+                </div>
+
+                <li class="nav-item mr-2" th:if="${currentUser==null}">
                     <a class="nav-link nav-link-2" href="/login" th:text="#{app.login}"></a>
                 </li>
+
+                <li class="position-relative mt-1 mr-2" th:unless="${currentUser==null}">
+                    <div class="dropdown">
+                        <button class="dropbtn profile" th:text="${currentUser.getFirstName().charAt(0)}"></button>
+                        <div class="dropdown-content bg-light">
+                            <a class="color-white" href="/my-profile" th:text="#{my-profile}"></a>
+                            <a class="color-white" href="/admin/dashboard"
+                               th:if="${ currentUser.getRole().getRoleEnum().name()=='ADMIN'}"
+                               th:text="#{dashboard.dashboard}"></a>
+                            <a class="color-white" href="/collection" th:text="#{collection.add}"></a>
+                            <a class="color-white" href="/my-collections" th:text="#{collections.my}"></a>
+                            <a class="color-white" href="/logout" th:text="#{app.logout}"></a>
+                        </div>
+                    </div>
+                </li>
+
             </ul>
 
-            <div class="form-check form-switch" style="margin-left: 20px">
-                <input type="checkbox" class="form-check-input" id="darkSwitch">
-            </div>
         </div>
     </div>
 </nav>
@@ -84,7 +94,7 @@
     </form>
 </div>
 
-<div class="container-fluid tm-container-content tm-mt-60">
+<div class="container tm-container-content tm-mt-60">
     <div class="row mb-4">
         <h2 class="col-12 tm-text-primary" th:text="${collection.getName()}"></h2>
     </div>
@@ -123,6 +133,12 @@
                     <span class="tm-text-gray-dark mb-3">Created date:</span>
                     <a href="#" class="tm-text-primary" th:text="${collection.getCreatedDate()}"></a>
                 </div>
+
+                <div th:unless="${currentUser}==null">
+                    <div th:if="${currentUser.getId()}==${collection.getAuthorId()}" >
+                        <a class="btn btn-primary" th:href="'/item/'+${collection.getId()}">Add items</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -140,7 +156,7 @@
                          alt="Image" class="img-fluid">
                     <figcaption class="d-flex align-items-center justify-content-center">
                         <h2 th:text="${item.getName()}"></h2>
-                        <a href="#">View more</a>
+                        <a th:href="'/item/details/'+${item.getId()}">View more</a>
                     </figcaption>
                 </figure>
                 <figure class="effect-ming tm-video-item" th:unless="${item.getImageUrl()!=null}">
@@ -148,7 +164,7 @@
                          alt="Image" class="img-fluid">
                     <figcaption class="d-flex align-items-center justify-content-center">
                         <h2 th:text="${item.getName()}"></h2>
-                        <a href="#">View more</a>
+                        <a th:href="'/item/details/'+${item.getId()}">View more</a>
                     </figcaption>
                 </figure>
                 <div class="card-body">
