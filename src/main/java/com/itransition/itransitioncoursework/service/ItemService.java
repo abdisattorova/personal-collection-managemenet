@@ -47,6 +47,8 @@ public class ItemService {
 
     private final LikeRepository likeRepository;
 
+    private final CommentService commentService;
+
 
     public String getItemsForm(UUID collectionId, Model model) {
 
@@ -55,7 +57,7 @@ public class ItemService {
 
         List<CustomFieldProjection> customFields = customFieldsService.getCustomFieldsOfCollection(collectionId);
         model.addAttribute("customFields", customFields);
-        return "items";
+        return "item-form";
 
     }
 
@@ -136,7 +138,7 @@ public class ItemService {
         if (uuid1 == null) {
             likeRepository.save(new Like(user, itemRepository.findById(itemId).get()));
         }
-        return "redirect:/";
+        return "redirect:/item/details/" + itemId;
 
     }
 
@@ -152,15 +154,23 @@ public class ItemService {
         if (uuid1 == null) {
             dislikeRepository.save(new Dislike(user, itemRepository.findById(itemId).get()));
         }
-        return "redirect:/";
+        return "redirect:/item/details/" + itemId;
     }
 
 
     public String getItemDetails(UUID itemId, Model model) {
+
         ItemProjectionForDetail itemDetails = itemRepository.getItemDetails(itemId);
         model.addAttribute("item", itemDetails);
+
         List<ItemProjectionForCollection> relatedItems = itemRepository.getItemsOfCollection(itemDetails.getCollectionId());
         model.addAttribute("relatedItems", relatedItems);
         return "item-detail";
+    }
+
+    public String getAllItems(Model model) {
+        List<ItemProjectionForCollection> items = itemRepository.getAllItems();
+        model.addAttribute("items", items);
+        return "items";
     }
 }

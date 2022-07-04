@@ -12,6 +12,7 @@ import com.itransition.itransitioncoursework.service.TopicService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -35,11 +36,15 @@ public class CollectionController {
     private final ItemService itemService;
 
 
+    @ModelAttribute("currentUser")
+    public User currentUser(@AuthenticationPrincipal User currentUser) {
+        return currentUser;
+    }
+
     @ModelAttribute("collection")
     public CollectionDto modelAttribute() {
         return new CollectionDto();
     }
-
 
 
     @GetMapping
@@ -52,7 +57,15 @@ public class CollectionController {
     }
 
 
+    @GetMapping("/collections")
+    public String getCollections(Model model) {
+        return collectionService.getAllCollections(model);
+    }
 
+    @GetMapping("/my-collections")
+    public String getMyCollections(Model model, @CurrentUser User user) {
+        return collectionService.getMyCollections(model, user);
+    }
 
 
     @GetMapping("/collection/details/{collectionId}")
@@ -61,16 +74,12 @@ public class CollectionController {
     }
 
 
-
-
     @GetMapping("/collection")
     public String getCollectionForm(Model model) {
         model.addAttribute("collection", new CollectionDto());
         model.addAttribute("topics", topicService.getAllTopics());
         return "collection";
     }
-
-
 
 
     @PostMapping(value = "/collection",

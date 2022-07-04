@@ -1,0 +1,292 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box !important;
+    list-style: none !important;
+    text-decoration: none !important;
+}
+
+button {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+button:focus {
+    outline: none;
+}
+
+.option__select, .select__lang, .register__name, .register__last-name, .tag__items {
+    display: inline-flex;
+}
+
+.container-login100 {
+    background-image: url('/images/bg-01.jpg');
+}
+
+.description__error, .register__name-title, .error {
+    color: red;
+}
+
+.upload__btn {
+    color: red;
+    display: none;
+}
+
+.alert-success {
+    background-color: limegreen;
+}
+
+.alert-error {
+    background-color: red;
+}
+
+.checkbox {
+    width: 100%;
+}
+
+.profile {
+    font-size: 14px;
+    color: white;
+    width: 38px;
+    height: 39px;
+    padding: 0 0 1.5px 0;
+    background-color: #0058be;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-transform: uppercase;
+}
+
+.profile__option {
+    width: 323px;
+    height: 430px;
+    background-color: #35363a;
+    position: absolute;
+    z-index: 1000;
+}
+
+.profile__option-head {
+    padding: 30px 15px 15px;
+    background-color: black;
+    position: relative;
+}
+
+.user__profile {
+    position: absolute;
+    margin-top: -12px;
+    margin-left: 72px;
+}
+
+.user__profile-name {
+    font-size: 18px;
+    color: white;
+}
+
+.user__profile-gmail {
+    font-size: 12px;
+    margin-top: -4px;
+}
+
+.comment__item-profile {
+    width: 100%;
+    padding: 18px;
+    background-color: white;
+}
+
+/* ICONs */
+.fab.fa-google {
+    font-size: 24px;
+}
+.dashboard__edit  {
+    font-size: 20px;
+    color: #ffc107;
+}
+.dashboard__delete {
+    font-size: 20px;
+    color: #dc3545;
+}
+
+.items__detail img {
+    width: 100%;
+    height: 510px;
+    object-fit: cover;
+}
+
+.comments__container {
+    height: 480px;
+    padding: 20px 0 0 0;
+    overflow: scroll;
+    overflow-x: hidden;
+    /*position: relative;*/
+}
+
+.comments__body {
+    padding: 0 2px;
+}
+
+.comment__item-profile {
+    border-bottom: 0.8px solid #3f3f3f;
+}
+
+.checkbox__tag-title {
+    font-size: 16px;
+    color: black;
+}
+
+/*.date-time {*/
+/*    margin-left: 16rem;*/
+/*}*/
+
+/*.comments__footer {*/
+/*    position: absolute;*/
+/*    left: 0;*/
+/*    right: 0;*/
+/*    bottom: 0;*/
+/*}*/
+
+.btn-primary {
+    font-size: 1.1rem !important;
+}
+
+.comments-form {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.comments-btn {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.home__card {
+    height: 166px;
+}
+
+.comment__item-left {
+    position: relative;
+}
+
+.profile_and_message {
+    margin-left: 38px;
+}
+
+.message {
+    width: 350px;
+}
+
+.message__profile {
+    position: absolute;
+    top: 6px;
+    left: -7px;
+}
+
+
+/* Pagination-style */
+.form__change, .form__change-tables {
+    width: 500px;
+    height: 500px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 200;
+    transform: translate(-50%, -50%);
+}
+
+.hidden, .hidden__bg {
+    display: none;
+}
+
+.modals {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70%;
+
+    background-color: white;
+    padding: 6rem;
+    border-radius: 5px;
+    box-shadow: 0 3rem 5rem rgba(0, 0, 0, 0.3);
+    z-index: 10;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(3px);
+    z-index: 50;
+}
+
+
+
+/* Select-styles */
+.selectBox {
+    width: 100%;
+    position: relative;
+}
+
+.selectBox select {
+    width: 100%;
+    font-weight: bold;
+}
+
+.overSelect {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+#checkboxes {
+    display: none;
+    border: 1px #dadada solid;
+}
+
+#checkboxes label {
+    display: block;
+}
+
+#checkboxes label:hover {
+    background-color: #1e90ff;
+}
+
+
+/* Dropdown */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    right: 20px;
+}
+
+.dropdown-content a {
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.color-white {
+    color: black;
+}
+
+.dropdown-content a:hover {background-color: #ddd;}
+
+.dropdown:hover .dropdown-content {display: block;}
+

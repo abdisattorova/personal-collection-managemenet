@@ -34,11 +34,11 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link nav-link-1 active" aria-current="page" href="/" th:text="#{app.collections}"></a>
+                    <a class="nav-link nav-link-1" aria-current="page" href="/" th:text="#{app.collections}"></a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link nav-link-2 " href="/collections" th:text="#{collections}"></a>
+                    <a class="nav-link nav-link-2 active " href="/collections" th:text="#{collections}"></a>
                 </li>
 
                 <li class="nav-item">
@@ -95,7 +95,7 @@
 
 <div class="container-fluid tm-container-content tm-mt-60">
     <div class="row mb-4">
-        <h2 class="col-6 tm-text-primary" th:text="#{collections.top5LargestCollections}">
+        <h2 class="col-6 tm-text-primary" th:text="#{collections}">
         </h2>
     </div>
     <div class="row tm-mb-90 tm-gallery">
@@ -109,46 +109,8 @@
             </figure>
             <div class="d-flex justify-content-between tm-text-gray">
                 <span class="tm-text-gray-light" th:text="${collection.getCreatedDate()}"></span>
-                <span th:text="${collection.getItemsCount()}+' '+#{items.lowercase}"></span>
-            </div>
-        </div>
-    </div>
-    <div class="row mb-4">
-        <h2 class="col-12 tm-text-primary" th:text="#{items.latest}">
-        </h2>
-    </div>
-    <div class="row tm-mb-90 tm-gallery">
-        <div class="col-xl-2 col-lg-4 col-md-6 col-sm-6 col-12 mb-5" th:each="item : ${latestItems}">
-            <div class="card">
-                <figure class="effect-ming tm-video-item" th:if="${item.getImageUrl()!=null}">
-                    <img th:src="${item.getImageUrl()}"
-                         alt="Image" class="img-fluid">
-                    <figcaption class="d-flex align-items-center justify-content-center">
-                        <h2 th:text="${item.getName()}"></h2>
-                        <a th:href="'/item/details/'+${item.getId()}">View more</a>
-                    </figcaption>
-                </figure>
-                <figure class="effect-ming tm-video-item" th:unless="${item.getImageUrl()!=null}">
-                    <img th:src="#{DEFAULT_PICTURE_URL}"
-                         alt="Image" class="img-fluid">
-                    <figcaption class="d-flex align-items-center justify-content-center">
-                        <h2 th:text="${item.getName()}"></h2>
-                        <a th:href="'/item/details/'+${item.getId()}">View more</a>
-                    </figcaption>
-                </figure>
-                <div class="card-body home__card">
-                    <div class="mr-4 mb-2 mt-2">
-                        <a href="#" class="tm-text-primary" th:text="${item.getCreatedDate()}"></a>
-                    </div>
-                    <div class="card__footer d-flex flex-column justify-content-end">
-                        <div>
-                            <a href="#" class="tm-text-primary mr-4 mb-2 " th:each=" tag : ${item.getTags()}"
-                               th:text="'#'+${tag.name}"></a>
-                        </div>
-                        <a th:href="'/item/details/'+${item.getId()}" class="btn btn-primary"
-                           th:text="#{actions.moreInfo}"></a>
-                    </div>
-                </div>
+                <span th:text="${collection.getItemsCount()}+' items'"></span>
+                <a th:href="'/item/'+${collection.getId()}">add items</a>
             </div>
         </div>
     </div>
@@ -198,7 +160,7 @@
         $("#locales").change(function () {
             var selectedOption = $('#locales').val();
             if (selectedOption != '') {
-                window.location.replace('/?lang=' + selectedOption);
+                window.location.replace('/collections?lang=' + selectedOption);
             }
         });
     });

@@ -95,7 +95,9 @@ public class AuthService implements UserDetailsService {
             String email = (String) userAttributes.get("email");
             String[] s = name.split(" ");
             User userByEmail = userRepository.findByEmail(email);
+
             if (userByEmail == null) {
+                SecurityContextHolder.getContext().setAuthentication(null);
                 User user = new
                         User(s[0], s[1], email);
                 userByEmail = userRepository.save(user);
@@ -118,4 +120,7 @@ public class AuthService implements UserDetailsService {
         userRepository.save(user);
     }
 
+
 }
+
+

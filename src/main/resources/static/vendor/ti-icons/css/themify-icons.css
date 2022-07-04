@@ -107,12 +107,7 @@
 .ti-pin:before {
 	content: "\e61b";
 }
-.ti-pencil:before {
-	content: "\e61c";
-}
-.ti-pencil-alt:before {
-	content: "\e61d";
-}
+
 .ti-paint-roller:before {
 	content: "\e61e";
 }
@@ -692,9 +687,7 @@
 .ti-pin-alt:before {
 	content: "\e6de";
 }
-.ti-pencil-alt2:before {
-	content: "\e6df";
-}
+
 .ti-palette:before {
 	content: "\e6e0";
 }

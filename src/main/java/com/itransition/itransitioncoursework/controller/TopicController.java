@@ -2,15 +2,14 @@ package com.itransition.itransitioncoursework.controller;
 //Sevinch Abdisattorova 06/19/2022 8:31 PM
 
 import com.itransition.itransitioncoursework.entity.Topic;
+import com.itransition.itransitioncoursework.entity.User;
 import com.itransition.itransitioncoursework.service.TopicService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.UUID;
@@ -23,6 +22,11 @@ public class TopicController {
 
     private final TopicService topicService;
 
+
+    @ModelAttribute("currentUser")
+    public User currentUser(@AuthenticationPrincipal User currentUser) {
+        return currentUser;
+    }
 
     @GetMapping
     public String getTopicForm(Model model,

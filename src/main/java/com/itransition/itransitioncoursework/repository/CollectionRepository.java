@@ -21,7 +21,18 @@ public interface CollectionRepository
             "group by c.id " +
             "order by itemsCount desc " +
             "limit 5; ")
-    List<CollectionProjection> findTopCollections();
+    List<CollectionProjection> getTopCollections();
+
+
+    @Query(nativeQuery = true, value = "select cast(c.id as varchar) as id," +
+            "       c.name                as name," +
+            "       c.image_url           as imageUrl," +
+            "       count(i.*)            as itemsCount " +
+            "from collections c " +
+            "       left  join items i on c.id = i.collection_id " +
+            "group by c.id " +
+            "order by itemsCount")
+    List<CollectionProjection> getAllCollections();
 
 
     @Query(nativeQuery = true, value = "select cast(c.id as varchar)  as id," +
@@ -57,5 +68,17 @@ public interface CollectionRepository
 
     @Query(nativeQuery = true, value = " select count(*) from collections")
     Integer countAll();
+
+
+    @Query(nativeQuery = true, value = "select cast(c.id as varchar) as id," +
+            "       c.name                as name," +
+            "       c.image_url           as imageUrl," +
+            "       count(i.*)            as itemsCount " +
+            "from collections c " +
+            "       left  join items i on c.id = i.collection_id " +
+            "where c.created_by_id = :userId " +
+            "group by c.id " +
+            "order by itemsCount")
+    List<CollectionProjection> getMyCollections(UUID userId);
 
 }
