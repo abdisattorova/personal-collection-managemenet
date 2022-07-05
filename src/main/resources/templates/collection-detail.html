@@ -135,7 +135,7 @@
                 </div>
 
                 <div th:unless="${currentUser}==null">
-                    <div th:if="${currentUser.getId()}==${collection.getAuthorId()}" >
+                    <div th:if="${currentUser.getId()==collection.getAuthorId() ||  currentUser.getRole().getRoleEnum().name()=='ADMIN'}" >
                         <a class="btn btn-primary" th:href="'/item/'+${collection.getId()}">Add items</a>
                     </div>
                 </div>

@@ -27,4 +27,9 @@ public interface FieldValueRepository extends JpaRepository<FieldValue, UUID> {
             " and cf.field_data_type != 'file'")
     List<CustomFieldValueProjection> getFieldValuesOfItem(UUID itemId);
 
+
+    @Query(nativeQuery = true, value ="select value\n" +
+            "from field_values\n" +
+            "where custom_field_id = :fieldId")
+    String findFieldByFieldId(UUID fieldId);
 }

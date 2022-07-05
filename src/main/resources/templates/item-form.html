@@ -94,8 +94,15 @@
     <div class="container-login100">
         <div class="wrap-login100 p-l-110 p-r-110 p-t-62 p-b-33 bg-light">
             <form class="login100-form validate-form flex-sb flex-w"
-                  id="formElem" th:action="@{/item/add}" th:method="post" enctype="multipart/form-data">
+                  id="formElem" th:action="@{/item/add}"
+                  th:method="post" enctype="multipart/form-data">
 
+                <div class="input100" th:if="${param.tagError}">
+                    <div class="alert-error mb-5">
+                        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                        At least one tag should be selected!
+                    </div>
+                </div>
 
                 <input type="text" name="collectionId" th:value="${collectionId}" hidden>
 
@@ -153,18 +160,18 @@
                                 <span class="focus-input100"></span>
                             </div>
                         </div>
-                        <div th:if="${field.getFieldDataType()} eq 'checkbox'">
-                            <div class="wrap-input100 mt-4">
-                                <div class="form-check mt-3">
-                                    <input class="form-check-input" type="checkbox"
-                                           th:value="${field.getName()}"
-                                           th:name="${field.getId()}" id="checkbox"/>
-                                    <label class="form-check-label" for="checkbox">
-                                        [[${field.getName()}]]
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
+                        <!--                        <div th:if="${field.getFieldDataType()} eq 'checkbox'">-->
+                        <!--                            <div class="wrap-input100 mt-4">-->
+                        <!--                                <div class="form-check mt-3">-->
+                        <!--                                    <input class="form-check-input" type="checkbox"-->
+                        <!--                                           th:value="${field.getName()}"-->
+                        <!--                                           th:name="${field.getId()}" id="checkbox"/>-->
+                        <!--                                    <label class="form-check-label" for="checkbox">-->
+                        <!--                                        [[${field.getName()}]]-->
+                        <!--                                    </label>-->
+                        <!--                                </div>-->
+                        <!--                            </div>-->
+                        <!--                        </div>-->
 
                         <div th:if="${field.getFieldDataType()} eq 'textarea'">
                             <div class="p-t-31 p-b-9">
@@ -172,7 +179,8 @@
                                 </span>
                             </div>
                             <div class="wrap-input100">
-                                <textarea th:name="${field.getId()}" class="inputTextArea" id="textarea"
+                                <textarea th:name="${field.getId()}"
+                                          class="inputTextArea" id="textarea"
                                 ></textarea>
                             </div>
                         </div>

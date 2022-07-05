@@ -237,13 +237,60 @@
             <div class="tm-bg-gray tm-video-details">
 
                 <h2 class="col-12 tm-text-primary">Item details</h2>
+                <div th:unless="${currentUser==null}">
+                    <div th:if="${currentUser.getId()==item.getAuthorId() || currentUser.getRole().getRoleEnum().name()=='ADMIN'}">
+                        <button
+                                data-bs-toggle="modal"
+                                th:attr="data-bs-target='#editItem'+${item.getId()}"
+                        ><i class="far fa-pen dashboard__edit"></i></button>
+                        <button type="button"
+                                data-bs-toggle="modal"
+                                th:attr="data-bs-target='#deleteItem'+${item.getId()}">
+                            <i class="far fa-trash-alt dashboard__delete ml-2 mr-2"></i></button>
+                    </div>
+                    <div class="modal fade" th:id="'deleteItem'+${item.getId()}" tabindex="-1"
+                         aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-simple modal-edit-user">
+                            <div class="modal-content p-3 p-md-5">
+                                <div class="modal-body">
+                                    <form method="post" th:action="@{/item/delete}">
+                                        <input hidden th:value="${item.getId()}" name="id">
+                                        <input hidden th:value="${item.getCollectionId()}" name="collectionId">
+                                        <div class="row">
+                                            <div class="col-12 ">
+                                                <h5>Are you sure to delete this item?</h5>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal"
+                                                    th:text="#{actions.cancel}">
+                                            </button>
+                                            <button type="submit" class="btn btn-primary"
+                                                    th:text="#{actions.delete}">
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="mb-4 d-flex flex-wrap">
-                    <div class="mr-4 mb-2">
+
+                    <div class="mr-4 mb-1 ">
+                        <span class="tm-text-gray-dark">Name:
+                        </span><span class="tm-text-primary" th:text="${item.getName()}"></span>
+                    </div>
+                </div>
+                <div class="mb-4 d-flex flex-wrap">
+                    <div class="mr-4 mb-1">
                         <span class="tm-text-gray-dark">Author:
                         </span><span class="tm-text-primary" th:text="${item.getAuthorName()}"></span>
                     </div>
-
-                    <div class="mr-4 mb-2">
+                </div>
+                <div class="mb-4 d-flex flex-wrap">
+                    <div class="mr-4 mb-1">
                         <span class="tm-text-gray-dark">Collection:
                         </span><span class="tm-text-primary" th:text="${item.getCollectionName()}"></span>
                     </div>

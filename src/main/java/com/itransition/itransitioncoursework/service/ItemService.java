@@ -3,6 +3,7 @@ package com.itransition.itransitioncoursework.service;
 
 
 import com.itransition.itransitioncoursework.dto.ItemDto;
+import com.itransition.itransitioncoursework.entity.Collection;
 import com.itransition.itransitioncoursework.entity.*;
 import com.itransition.itransitioncoursework.projection.CustomFieldProjection;
 import com.itransition.itransitioncoursework.projection.ItemProjectionForCollection;
@@ -21,10 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -51,11 +49,33 @@ public class ItemService {
 
 
     public String getItemsForm(UUID collectionId, Model model) {
-
         List<Tag> tags = tagService.getAll();
         model.addAttribute("tags", tags);
 
         List<CustomFieldProjection> customFields = customFieldsService.getCustomFieldsOfCollection(collectionId);
+        model.addAttribute("customFields", customFields);
+        ItemDto itemDto = new ItemDto();
+        itemDto.setCollectionId(collectionId);
+        model.addAttribute("item", itemDto);
+        return "item-form";
+
+    }
+
+
+    public String getEditForm(UUID itemId, Model model) {
+
+        Optional<Item> byId = itemRepository.findById(itemId);
+        Item item = byId.get();
+
+        ItemDto itemDto = new ItemDto(item.getCollection().getId(), item.getName(), new ArrayList<>());
+        model.addAttribute("item", itemDto);
+
+        List<Tag> tags = tagService.getAll();
+        model.addAttribute("tags", tags);
+
+        List<CustomFieldProjection> customFields = customFieldsService
+                .getCustomFieldsOfCollection(item.getCollection().getId());
+
         model.addAttribute("customFields", customFields);
         return "item-form";
 
@@ -172,5 +192,18 @@ public class ItemService {
         List<ItemProjectionForCollection> items = itemRepository.getAllItems();
         model.addAttribute("items", items);
         return "items";
+    }
+
+    public String deleteItem(UUID id, UUID collectionId, RedirectAttributes model) {
+        try {
+            itemRepository.deleteById(id);
+            model.addFlashAttribute("success", true);
+            model.addAttribute("message", "Item successfully  deleted!");
+            return "redirect:/collection/details/" + collectionId;
+        } catch (Exception e) {
+            model.addFlashAttribute("success", false);
+            model.addAttribute("message", "Item could not be  deleted!");
+            return "redirect:/item/details/" + id;
+        }
     }
 }

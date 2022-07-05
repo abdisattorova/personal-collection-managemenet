@@ -37,10 +37,14 @@ public class ItemController {
     }
 
 
-
     @GetMapping("/{collectionId}")
     public String getItemsForm(Model model, @PathVariable UUID collectionId) {
         return itemService.getItemsForm(collectionId, model);
+    }
+
+    @GetMapping("/edit-form")
+    public String getItemsEditForm(Model model, @RequestParam UUID itemId) {
+        return itemService.getEditForm(itemId, model);
     }
 
 
@@ -51,7 +55,7 @@ public class ItemController {
 
 
     @GetMapping("/all")
-    public String getAllItems(Model model){
+    public String getAllItems(Model model) {
         return itemService.getAllItems(model);
     }
 
@@ -61,9 +65,17 @@ public class ItemController {
                                       MultipartHttpServletRequest file,
                                       HttpServletRequest request,
                                       RedirectAttributes redirectAttributes) throws IOException {
+        if (itemDto.getTagIds() == null || itemDto.getTagIds().size() == 0) {
+            return "redirect:/item/"+itemDto.getCollectionId()+"?tagError";
+        }
         return itemService.addItem(itemDto, file, request, redirectAttributes);
     }
 
+
+    @PostMapping("/delete")
+    public String deleteItem(@RequestParam UUID id, @RequestParam UUID collectionId, RedirectAttributes model) {
+        return itemService.deleteItem(id, collectionId, model);
+    }
 
     @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
     @GetMapping("/like/{itemId}")
