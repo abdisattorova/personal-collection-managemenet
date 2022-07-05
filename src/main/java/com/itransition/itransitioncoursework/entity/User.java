@@ -27,20 +27,31 @@ import java.util.UUID;
 @Builder
 public class User implements UserDetails {
 
-    String firstName;
-    String lastName;
-    String email;
-    String password = "password";
-    @Column(columnDefinition = "boolean default false")
-    Boolean isBlocked = false;
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "role_id")
-    Role role = new Role(RoleEnum.USER);
+
     @Id
     @Type(type = "org.hibernate.type.PostgresUUIDType")
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
+
+    String firstName;
+
+    String lastName;
+
+    String email;
+
+    String password = "password";
+
+
+    @Column(columnDefinition = "boolean default false")
+    Boolean isBlocked = false;
+
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "role_id")
+    Role role = new Role(RoleEnum.USER);
+
+
 
     public User(String firstName, String lastName, String email) {
         this.firstName = firstName;

@@ -21,7 +21,6 @@ function addFileList(listFile) {
 
     fileType.add(new Option("Text", "text"))
     fileType.add(new Option("Text area", "textarea"))
-    fileType.add(new Option("Checkbox", "checkbox"))
     fileType.add(new Option("Number", "number"))
     fileType.add(new Option("Date", "date"))
     fileType.add(new Option("Image", "file"))

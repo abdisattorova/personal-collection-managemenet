@@ -103,7 +103,8 @@ public class AuthService implements UserDetailsService {
                 userByEmail = userRepository.save(user);
             }
 
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userByEmail,
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                    userByEmail,
                     null,
                     userByEmail.getAuthorities());
 
