@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
+//@EnableJpaRepositories(repositoryBaseClass = SearchRepositoryImpl.class,
+//        basePackages = {"com.itransition.itransitioncoursework.repository"})
 public class AppConfig {
 
     @Value("${CLOUD_NAME}")
@@ -45,4 +47,5 @@ public class AppConfig {
         config.put("api_secret", apiSecret);
         return new Cloudinary(config);
     }
+
 }

@@ -8,12 +8,11 @@ import com.itransition.itransitioncoursework.entity.*;
 import com.itransition.itransitioncoursework.projection.CustomFieldProjection;
 import com.itransition.itransitioncoursework.projection.ItemProjectionForCollection;
 import com.itransition.itransitioncoursework.projection.ItemProjectionForDetail;
-import com.itransition.itransitioncoursework.repository.DislikeRepository;
-import com.itransition.itransitioncoursework.repository.FieldValueRepository;
-import com.itransition.itransitioncoursework.repository.ItemRepository;
-import com.itransition.itransitioncoursework.repository.LikeRepository;
+import com.itransition.itransitioncoursework.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.search.jpa.FullTextEntityManager;
+import org.hibernate.search.query.dsl.QueryBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,22 +29,13 @@ import java.util.*;
 public class ItemService {
 
     private final TagService tagService;
-
     private final CloudinaryService cloudinaryService;
-
-    private final CollectionService collectionService;
-
     private final CustomFieldsService customFieldsService;
-
     private final FieldValueRepository fieldValueRepository;
-
     private final ItemRepository itemRepository;
-
     private final DislikeRepository dislikeRepository;
-
     private final LikeRepository likeRepository;
-
-    private final CommentService commentService;
+    private final CollectionRepository collectionRepository;
 
 
     public String getItemsForm(UUID collectionId, Model model) {
@@ -87,7 +77,7 @@ public class ItemService {
                           HttpServletRequest request,
                           RedirectAttributes redirectAttributes) throws IOException {
 
-        Collection collectionById = collectionService.getCollectionById(itemDto.getCollectionId());
+        Collection collectionById = collectionRepository.findById(itemDto.getCollectionId()).get();
 
         List<Tag> tags = new ArrayList<>();
 
@@ -188,11 +178,13 @@ public class ItemService {
         return "item-detail";
     }
 
+
     public String getAllItems(Model model) {
         List<ItemProjectionForCollection> items = itemRepository.getAllItems();
         model.addAttribute("items", items);
         return "items";
     }
+
 
     public String deleteItem(UUID id, UUID collectionId, RedirectAttributes model) {
         try {
@@ -206,4 +198,26 @@ public class ItemService {
             return "redirect:/item/details/" + id;
         }
     }
+
+
+    public List<Item> getItemsBySearch(String text, FullTextEntityManager fullTextEntityManager) {
+
+        QueryBuilder queryBuilder = fullTextEntityManager.getSearchFactory()
+                .buildQueryBuilder()
+                .forEntity(Item.class)
+                .get();
+
+        org.apache.lucene.search.Query query = queryBuilder
+                .keyword()
+                .wildcard()
+                .onField("name")
+                .matching("*" + text + "*")
+                .createQuery();
+
+        org.hibernate.search.jpa.FullTextQuery jpaQuery
+                = fullTextEntityManager.createFullTextQuery(query,
+                Item.class);
+        return jpaQuery.getResultList();
+    }
+
 }

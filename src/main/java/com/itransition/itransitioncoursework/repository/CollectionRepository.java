@@ -5,10 +5,12 @@ import com.itransition.itransitioncoursework.projection.CollectionDetailsProject
 import com.itransition.itransitioncoursework.projection.CollectionProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.UUID;
 
+@Repository
 public interface CollectionRepository
         extends JpaRepository<Collection, UUID> {
 
