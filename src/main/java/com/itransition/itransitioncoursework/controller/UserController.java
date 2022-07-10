@@ -61,15 +61,15 @@ public class UserController {
 
     @PostMapping("/promote")
     public String promoteUserToAdmin(@RequestParam UUID id,
-                              RedirectAttributes model,
-                              @RequestParam Integer page) {
+                                     RedirectAttributes model,
+                                     @RequestParam Integer page) {
         return userService.promoteUserToAdmin(id, model, page);
     }
 
     @PostMapping("/remove")
     public String removeUserFromAdmin(@RequestParam UUID id,
-                                     RedirectAttributes model,
-                                     @RequestParam Integer page) {
+                                      RedirectAttributes model,
+                                      @RequestParam Integer page) {
         return userService.removeUserFromAdmin(id, model, page);
     }
 }

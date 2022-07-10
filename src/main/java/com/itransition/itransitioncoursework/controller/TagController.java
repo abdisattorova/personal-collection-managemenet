@@ -36,15 +36,15 @@ public class TagController {
     @PostMapping
     public String addTag(Tag tag, Model model) {
         boolean isAdded = tagService.addNewTag(tag, model);
-        if (tag.getId()!=null)
+        if (tag.getId() != null)
             return isAdded ? "redirect:/tag?saved" : "redirect:/tag?exists";
         else
             return isAdded ? "redirect:/tag?edited" : "redirect:/tag?exists";
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteTag(@PathVariable UUID id,Model model){
-        return tagService.deleteTag(id,model);
+    public String deleteTag(@PathVariable UUID id, Model model) {
+        return tagService.deleteTag(id, model);
     }
 
 }

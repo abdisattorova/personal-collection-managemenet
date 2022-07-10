@@ -41,7 +41,7 @@ public class CommentController {
 
     @PostMapping("/delete")
     public String deleteComment(
-          @RequestParam UUID id
+            @RequestParam UUID id
     ) {
         return commentService.deleteComment(id);
     }

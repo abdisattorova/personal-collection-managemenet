@@ -4,10 +4,7 @@ package com.itransition.itransitioncoursework.controller;
 import com.itransition.itransitioncoursework.config.security.CurrentUser;
 import com.itransition.itransitioncoursework.dto.CollectionDto;
 import com.itransition.itransitioncoursework.entity.User;
-import com.itransition.itransitioncoursework.projection.CollectionProjection;
-import com.itransition.itransitioncoursework.projection.ItemProjectionForCollection;
 import com.itransition.itransitioncoursework.service.CollectionService;
-import com.itransition.itransitioncoursework.service.ItemService;
 import com.itransition.itransitioncoursework.service.TopicService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.List;
 import java.util.UUID;
 
 
