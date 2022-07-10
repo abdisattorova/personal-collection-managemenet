@@ -17,7 +17,6 @@ import java.util.Locale;
 public class MvcConfig implements WebMvcConfigurer {
 
 
-
     @Bean
     public LocaleResolver localeResolver() {
         SessionLocaleResolver slr = new SessionLocaleResolver();
@@ -26,14 +25,12 @@ public class MvcConfig implements WebMvcConfigurer {
     }
 
 
-
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor() {
         LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
         lci.setParamName("lang");
         return lci;
     }
-
 
 
     @Override

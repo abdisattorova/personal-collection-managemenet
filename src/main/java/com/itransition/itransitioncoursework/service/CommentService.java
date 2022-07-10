@@ -9,8 +9,11 @@ import com.itransition.itransitioncoursework.projection.CommentProjection;
 import com.itransition.itransitioncoursework.repository.CommentRepository;
 import com.itransition.itransitioncoursework.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.search.jpa.FullTextEntityManager;
+import org.hibernate.search.query.dsl.QueryBuilder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -21,7 +24,7 @@ public class CommentService {
 
     private final ItemRepository itemRepository;
     private final CommentRepository commentRepository;
-
+    private final EntityManager entityManager;
 
     public List<CommentProjection> getCommentsOfItem(UUID itemId) {
         return commentRepository.getCommentsOfItem(itemId);
@@ -37,7 +40,7 @@ public class CommentService {
             commentRepository.save(comment);
             return "redirect:/item/details/" + commentDto.getItemId();
         }
-        // TODO: 07/02/2022  if item not found
+
         return "redirect:/item/details/" + commentDto.getItemId() + "?error";
     }
 
@@ -64,7 +67,27 @@ public class CommentService {
             commentRepository.save(comment);
             return "redirect:/item/details/" + commentDto.getItemId();
         }
-        // TODO: 07/02/2022  if item not found
         return "redirect:/item/details/" + commentDto.getItemId() + "?error";
     }
+
+    public List<Comment> getCommentsBySearch(String text,
+                                             FullTextEntityManager fullTextEntityManager) {
+        QueryBuilder queryBuilder = fullTextEntityManager.getSearchFactory()
+                .buildQueryBuilder()
+                .forEntity(Comment.class)
+                .get();
+
+        org.apache.lucene.search.Query query = queryBuilder
+                .keyword()
+                .wildcard()
+                .onField("content")
+                .matching("*" + text + "*")
+                .createQuery();
+
+        org.hibernate.search.jpa.FullTextQuery jpaQuery
+                = fullTextEntityManager.createFullTextQuery(query,
+                Comment.class);
+        return jpaQuery.getResultList();
+    }
+
 }

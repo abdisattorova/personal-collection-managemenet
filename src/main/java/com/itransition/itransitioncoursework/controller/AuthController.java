@@ -29,13 +29,11 @@ public class AuthController {
         return "login";
     }
 
-
     @GetMapping("/registration")
     public String registrationForm(Model model) {
         model.addAttribute("user", new RegistrationDto());
         return "registration";
     }
-
 
     @PostMapping("/registration")
     public String registerUser(
@@ -57,7 +55,6 @@ public class AuthController {
         authService.save(registrationDto);
         return "redirect:/login?registered";
     }
-
 
     @GetMapping("/success-oauth2")
     public String getLoginInfo(

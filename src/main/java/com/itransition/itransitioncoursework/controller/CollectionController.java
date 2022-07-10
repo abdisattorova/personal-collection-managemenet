@@ -33,7 +33,6 @@ public class CollectionController {
 
     private final TopicService topicService;
     private final CollectionService collectionService;
-    private final ItemService itemService;
 
 
     @ModelAttribute("currentUser")
@@ -48,12 +47,9 @@ public class CollectionController {
 
 
     @GetMapping
-    public String getMainPage(Model model) {
-        List<ItemProjectionForCollection> items = itemService.getLastAddedItems();
-        model.addAttribute("latestItems", items);
-        List<CollectionProjection> topCollections = collectionService.getTopCollections(model);
-        model.addAttribute("collections", topCollections);
-        return "index";
+    public String getMainPage(Model model,
+                              @RequestParam(value = "text", required = false) String text) {
+        return collectionService.getMainPage(model,text);
     }
 
 

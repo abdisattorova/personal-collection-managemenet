@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.PackagePrivate;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Indexed;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -16,10 +18,13 @@ import javax.persistence.ManyToOne;
 @Data
 @Entity(name = "collections")
 @PackagePrivate
+@Indexed
 public class Collection extends AbsEntity {
 
+    @Field
     String name;
 
+    @Field
     String description;
 
     String imageUrl;

@@ -12,6 +12,7 @@ button {
     outline: none;
     cursor: pointer;
 }
+
 button:focus {
     outline: none;
 }
@@ -97,14 +98,46 @@ button:focus {
     background-color: white;
 }
 
+.search__image img {
+    width: 100%;
+    object-fit: cover;
+}
+
+.comments {
+    border-radius: 3px;
+    padding: 6px 10px;
+    transition: 0.3s;
+}
+
+.comments:hover {
+    background-color: #d6d7dc;
+}
+
+.comments__text {
+    line-height: 1.45;
+    transition: 0.4s;
+}
+
+.comments:hover .comments__text {
+    color: black;
+}
+
+.comments__link {
+    font-size: 22px;
+    color: #0e1e72;
+}
+
+
 /* ICONs */
 .fab.fa-google {
     font-size: 24px;
 }
-.dashboard__edit  {
+
+.dashboard__edit {
     font-size: 20px;
     color: #ffc107;
 }
+
 .dashboard__delete {
     font-size: 20px;
     color: #dc3545;
@@ -156,6 +189,7 @@ button:focus {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
 }
+
 .comments-btn {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
@@ -227,7 +261,6 @@ button:focus {
 }
 
 
-
 /* Select-styles */
 .selectBox {
     width: 100%;
@@ -271,7 +304,7 @@ button:focus {
     display: none;
     position: absolute;
     min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
     right: 20px;
 }
@@ -286,7 +319,11 @@ button:focus {
     color: black;
 }
 
-.dropdown-content a:hover {background-color: #ddd;}
+.dropdown-content a:hover {
+    background-color: #ddd;
+}
 
-.dropdown:hover .dropdown-content {display: block;}
+.dropdown:hover .dropdown-content {
+    display: block;
+}
 

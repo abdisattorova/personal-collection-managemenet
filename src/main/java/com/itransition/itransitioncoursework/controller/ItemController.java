@@ -30,7 +30,6 @@ public class ItemController {
 
     private final ItemService itemService;
 
-
     @ModelAttribute("currentUser")
     public User currentUser(@AuthenticationPrincipal User currentUser) {
         return currentUser;
@@ -66,7 +65,7 @@ public class ItemController {
                                       HttpServletRequest request,
                                       RedirectAttributes redirectAttributes) throws IOException {
         if (itemDto.getTagIds() == null || itemDto.getTagIds().size() == 0) {
-            return "redirect:/item/"+itemDto.getCollectionId()+"?tagError";
+            return "redirect:/item/" + itemDto.getCollectionId() + "?tagError";
         }
         return itemService.addItem(itemDto, file, request, redirectAttributes);
     }
@@ -93,4 +92,6 @@ public class ItemController {
             @PathVariable UUID itemId) {
         return itemService.disLikeItem(user, itemId);
     }
+
+
 }

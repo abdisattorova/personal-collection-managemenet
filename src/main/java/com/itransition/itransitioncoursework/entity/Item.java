@@ -6,9 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.PackagePrivate;
-import org.hibernate.ObjectDeletedException;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Indexed;
 
 import javax.persistence.*;
 import java.util.List;
@@ -18,8 +19,10 @@ import java.util.List;
 @Data
 @Entity(name = "items")
 @PackagePrivate
+@Indexed
 public class Item extends AbsEntity {
 
+    @Field
     String name;
 
     @ManyToOne
