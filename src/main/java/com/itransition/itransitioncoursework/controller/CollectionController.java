@@ -96,7 +96,7 @@ public class CollectionController {
 
     @PostMapping("/delete")
     public String deleteCollection(@RequestParam UUID collectionId, RedirectAttributes attributes) {
-        return collectionService.deleteCollection(collectionId,attributes);
+        return collectionService.deleteCollection(collectionId, attributes);
     }
 
 }

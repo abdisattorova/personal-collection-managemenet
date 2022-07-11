@@ -12,6 +12,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.UUID;
 
 
 @PasswordsEqualConstraint.List({
@@ -26,6 +27,8 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RegistrationDto {
+
+    private UUID id;
 
     @Size(min = 3, message = "First name should consist of at least 3 letters!")
     private String firstName;

@@ -65,8 +65,12 @@
                     <div class="dropdown">
                         <button class="dropbtn profile" th:text="${currentUser.getFirstName().charAt(0)}"></button>
                         <div class="dropdown-content bg-light">
-                            <a class="color-white" href="/my-profile" th:text="#{my-profile}"></a>
-                            <a class="color-white" href="/admin/dashboard"
+                            <a class="color-white"
+                               data-bs-toggle="modal"
+                               th:attr="data-bs-target='#myProfile'+${currentUser.getId()}"
+                               th:text="#{my-profile}"
+                            ></a>
+                            <a class="color-white" href="/admin/users"
                                th:if="${ currentUser.getRole().getRoleEnum().name()=='ADMIN'}"
                                th:text="#{dashboard.dashboard}"></a>
                             <a class="color-white" href="/collection" th:text="#{collection.add}"></a>
@@ -75,8 +79,81 @@
                         </div>
                     </div>
                 </li>
-
             </ul>
+
+            <div class="modal fade" th:if="${currentUser!=null}" th:id="'myProfile'+${currentUser.getId()}"
+                 tabindex="-1"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-simple modal-edit-user">
+                    <div class="modal-content p-3 p-md-5">
+                        <div class="modal-body">
+                            <div class="d-flex justify-content-between mb-4">
+                                <h3 class="edit-title" th:text="#{my-profile}"></h3>
+                                <button type="button" class="btn-close"
+                                        data-bs-dismiss="modal"
+                                        aria-label="Close">
+                                </button>
+                            </div>
+                            <form id="userForm" class="row g-3" method="post"
+                                  th:action="@{/profile}">
+                                <div class="row">
+                                    <input hidden name="id" th:value="${currentUser.getId()}">
+                                    <div class="col-12 ">
+                                        <label class="form-label mt-3"
+                                               th:text="#{registration.firstName}"></label>
+                                        <input
+                                                required
+                                                type="text" name="firstName"
+                                                class="form-control"
+                                                th:placeholder="#{registration.firstNameEnter}"
+                                                th:value="${currentUser.getFirstName()}"/>
+                                    </div>
+                                    <div class="col-12 ">
+                                        <label class="form-label mt-3"
+                                               th:text="#{registration.lastName}"></label>
+                                        <input
+                                                required
+                                                type="text" name="lastName"
+                                                class="form-control"
+                                                th:placeholder="#{registration.lastNameEnter}"
+                                                th:value="${currentUser.getLastName()}"/>
+                                    </div>
+                                    <div class="col-12 ">
+                                        <label class="form-label mt-3">Email</label>
+                                        <input
+                                                required
+                                                type="text" name="email"
+                                                class="form-control"
+                                                th:placeholder="#{email.placeholder}"
+                                                th:value="${currentUser.getEmail()}"/>
+                                    </div>
+                                    <div class="col-12 ">
+                                        <label class="form-label mt-3" th:text="#{login.password}"></label>
+                                        <input
+                                                type="text" name="password"
+                                                class="form-control"
+                                                th:placeholder="#{registration.newPassword}"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-12 text-end mt-4">
+                                    <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal"
+                                            th:text="#{actions.cancel}">
+                                    </button>
+                                    <a class="btn-danger"
+                                       th:href="'profile/delete/'+${currentUser.getId()}"
+                                       th:text="#{actions.delete}"
+                                    ></a>
+                                    <button type="submit" class="btn btn-primary ml-2"
+                                            th:text="#{actions.save}">
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </div>
     </div>
@@ -96,16 +173,16 @@
 
 
 <div class="container-fluid tm-container-content tm-mt-60">
-<!--    <div  th:unless="${message==null}">-->
-<!--        <div class="alert-error" th:unless="${success}">-->
-<!--            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>-->
-<!--            <h2 th:text="${message}"></h2>-->
-<!--        </div>-->
-<!--        <div class="alert-success" th:if="${success}">-->
-<!--            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>-->
-<!--            <h2 th:text="${message}"></h2>-->
-<!--        </div>-->
-<!--    </div>-->
+    <!--    <div  th:unless="${message==null}">-->
+    <!--        <div class="alert-error" th:unless="${success}">-->
+    <!--            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>-->
+    <!--            <h2 th:text="${message}"></h2>-->
+    <!--        </div>-->
+    <!--        <div class="alert-success" th:if="${success}">-->
+    <!--            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>-->
+    <!--            <h2 th:text="${message}"></h2>-->
+    <!--        </div>-->
+    <!--    </div>-->
     <div class="row mb-4">
 
         <h2 class="col-6 tm-text-primary" th:text="#{collections.top5LargestCollections}">
@@ -214,6 +291,7 @@
         });
     });
 </script>
+<script src="/js/bootstrap.min.js"></script>
 <script src="/js/darkmode.js"></script>
 <script src="/js/plugins.js"></script>
 <script>

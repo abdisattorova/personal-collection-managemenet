@@ -5,25 +5,35 @@ package com.itransition.itransitioncoursework.service;
 import com.itransition.itransitioncoursework.entity.Role;
 import com.itransition.itransitioncoursework.entity.User;
 import com.itransition.itransitioncoursework.entity.enums.RoleEnum;
-import com.itransition.itransitioncoursework.repository.UserRepository;
+import com.itransition.itransitioncoursework.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final CollectionRepository collectionRepository;
+    private final ItemRepository itemRepository;
+    private final CommentRepository commentRepository;
+    private final LikeRepository likeRepository;
+    private final DislikeRepository dislikeRepository;
 
     @Value("${USERS_SIZE}")
     private Integer size;
@@ -38,6 +48,7 @@ public class UserService {
 
     public String deleteUser(UUID id, RedirectAttributes model, Integer page) {
         try {
+            deleteEverythingUserCreated(id);
             userRepository.deleteById(id);
             if (page > countAllPages()) {
                 page--;
@@ -132,11 +143,66 @@ public class UserService {
         return pages;
     }
 
+
     public Integer getAdminsCount() {
         return userRepository.countUsers();
     }
 
+
     public Integer getUsersCount() {
         return userRepository.countAdmins();
+    }
+
+
+    public String editUser(User user, RedirectAttributes model) {
+        UUID id = user.getId();
+        Optional<User> byId = userRepository.findById(id);
+        if (byId.isPresent()) {
+            if (user.getPassword() != null && user.getPassword().length() > 0) {
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
+            }
+            userRepository.save(user);
+            model.addFlashAttribute("success", true);
+            model.addFlashAttribute("message", "Saved!");
+            model.addFlashAttribute("currentUser", user);
+            return "redirect:/";
+
+        }
+        model.addFlashAttribute("success", false);
+        model.addFlashAttribute("message", "Error!");
+        return "redirect:/";
+    }
+
+
+    public String deleteProfile(UUID id, RedirectAttributes attributes) {
+        Optional<User> byId = userRepository.findById(id);
+        if (byId.isPresent()) {
+            try {
+                deleteEverythingUserCreated(id);
+                userRepository.deleteById(id);
+                SecurityContextHolder.getContext().setAuthentication(null);
+                attributes.addFlashAttribute("currentUser", null);
+                attributes.addFlashAttribute("success", true);
+                attributes.addFlashAttribute("message", "Success!");
+                return "redirect:/";
+            } catch (Exception e) {
+                attributes.addFlashAttribute("success", false);
+                attributes.addFlashAttribute("message", "Error!");
+                return "redirect:/";
+            }
+        }
+        attributes.addFlashAttribute("success", false);
+        attributes.addFlashAttribute("message", "Error!");
+        return "redirect:/";
+    }
+
+
+    void deleteEverythingUserCreated(UUID id) {
+        try {
+            itemRepository.deleteAllByCreatedBy(id);
+            collectionRepository.deleteAllByCreatedBy(id);
+            commentRepository.deleteAllByCreatedBy(id);
+        } catch (Exception ignored) {
+        }
     }
 }

@@ -75,5 +75,6 @@ public interface ItemRepository extends JpaRepository<Item, UUID> {
             " where user_id = :userId and item_id = :itemId")
     UUID checkIfUserDislikesTheItem(UUID userId, UUID itemId);
 
+    void deleteAllByCreatedBy(UUID createdBy);
 
 }

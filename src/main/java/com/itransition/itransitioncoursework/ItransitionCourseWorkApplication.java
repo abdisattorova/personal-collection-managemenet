@@ -10,10 +10,4 @@ public class ItransitionCourseWorkApplication {
         SpringApplication.run(ItransitionCourseWorkApplication.class, args);
     }
 
-//    @Bean
-//    public ApplicationRunner buildIndex(Indexer indexer) {
-//        return (ApplicationArguments args) -> {
-//            indexer.indexPersistedData("com.itransition.itransitioncoursework.entity.Item");
-//        };
-//    }
 }

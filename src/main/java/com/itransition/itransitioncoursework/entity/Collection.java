@@ -34,6 +34,8 @@ public class Collection extends AbsEntity {
     @JoinColumn(name = "topic_id")
     Topic topic;
 
+    @OneToMany(mappedBy = "collection", cascade = CascadeType.ALL)
+    List<Item> items;
 
     public Collection(String name, String description, String imageUrl, Topic topic) {
         this.name = name;
@@ -41,9 +43,6 @@ public class Collection extends AbsEntity {
         this.imageUrl = imageUrl;
         this.topic = topic;
     }
-
-    @OneToMany(mappedBy = "collection",cascade = CascadeType.ALL)
-    List<Item> items;
 
 }
 
