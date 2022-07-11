@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catalog-Z Photo Detail Page</title>
+    <title>Collection Detail Page</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="/css/templatemo-style.css">
@@ -40,7 +40,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link nav-link-2 " href="/collections" th:text="#{collections}"></a>
+                    <a class="nav-link nav-link-2 " href="/collection/collections" th:text="#{collections}"></a>
                 </li>
 
                 <li class="nav-item">
@@ -72,7 +72,7 @@
                                th:if="${ currentUser.getRole().getRoleEnum().name()=='ADMIN'}"
                                th:text="#{dashboard.dashboard}"></a>
                             <a class="color-white" href="/collection" th:text="#{collection.add}"></a>
-                            <a class="color-white" href="/my-collections" th:text="#{collections.my}"></a>
+                            <a class="color-white" href="/collection/my-collections" th:text="#{collections.my}"></a>
                             <a class="color-white" href="/logout" th:text="#{app.logout}"></a>
                         </div>
                     </div>
@@ -86,8 +86,9 @@
 
 <div class="tm-hero d-flex justify-content-center align-items-center" data-parallax="scroll"
      data-image-src="/images/hero.jpg">
-     <form class="d-flex tm-search-form" th:action="@{/}" method="get">
-        <input class="form-control tm-search-input" type="search" name="text" th:placeholder="#{app.search}" aria-label="Search">
+    <form class="d-flex tm-search-form" th:action="@{/}" method="get">
+        <input class="form-control tm-search-input" type="search" name="text" th:placeholder="#{app.search}"
+               aria-label="Search">
         <button class="btn btn-outline-success tm-search-btn" type="submit">
             <i class="fas fa-search"></i>
         </button>
@@ -135,19 +136,99 @@
                 </div>
 
                 <div th:unless="${currentUser}==null">
-                    <div th:if="${currentUser.getId()==collection.getAuthorId() ||  currentUser.getRole().getRoleEnum().name()=='ADMIN'}" >
+                    <div th:if="${currentUser.getId()==collection.getAuthorId() ||  currentUser.getRole().getRoleEnum().name()=='ADMIN'}">
                         <a class="btn btn-primary" th:href="'/item/'+${collection.getId()}">Add items</a>
+                        <button
+                                data-bs-toggle="modal"
+                                th:attr="data-bs-target='#editCollection'+${collection.getId()}"
+                        ><i class="far fa-pen dashboard__edit"></i></button>
+                        <button type="button"
+                                data-bs-toggle="modal"
+                                th:attr="data-bs-target='#deleteCollection'+${collection.getId()}">
+                            <i class="far fa-trash-alt dashboard__delete ml-2 mr-2"></i></button>
                     </div>
+                    <div class="modal fade" th:id="'deleteCollection'+${collection.getId()}" tabindex="-1"
+                         aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-simple modal-edit-user">
+                            <div class="modal-content p-3 p-md-5">
+                                <div class="modal-body">
+                                    <form method="post" th:action="@{/collection/delete}">
+                                        <input hidden th:value="${collection.getId()}" name="collectionId">
+                                        <div class="row">
+                                            <div class="col-12 ">
+                                                <h5 class="card-body" th:text="#{collection.delete}"></h5>
+                                                <h5 class="card-body" th:text="#{collection.warn}"></h5>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal"
+                                                    th:text="#{actions.cancel}">
+                                            </button>
+                                            <button type="submit" class="btn btn-danger"
+                                                    th:text="#{actions.delete}">
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- EDIT MODAL -->
+<!--                    <div class="modal fade" th:id="'editCollection'+${comment.getId()}" tabindex="-1"-->
+<!--                         aria-hidden="true">-->
+<!--                        <div class="modal-dialog modal-lg modal-simple modal-edit-user">-->
+<!--                            <div class="modal-content p-3 p-md-5">-->
+<!--                                <div class="modal-body">-->
+<!--                                    <div class="d-flex justify-content-between mb-4">-->
+<!--                                        <h3 class="edit-title" th:text="#{comment.edit}"></h3>-->
+<!--                                        <button type="button" class="btn-close"-->
+<!--                                                data-bs-dismiss="modal"-->
+<!--                                                aria-label="Close">-->
+<!--                                        </button>-->
+<!--                                    </div>-->
+<!--                                    <form id="userForm" class="row g-3" method="post"-->
+<!--                                          th:action="@{/comment/edit}">-->
+<!--                                        <input hidden th:value="${comment.getId()}" name="id">-->
+<!--                                        <input hidden th:value="${item.getId()}" name="itemId">-->
+<!--                                        <div class="row">-->
+<!--                                            <div class="col-12 ">-->
+<!--                                                <label class="form-label mt-3"-->
+<!--                                                       th:text="#{comment}"></label>-->
+<!--                                                <input-->
+<!--                                                        required-->
+<!--                                                        type="text" name="content"-->
+<!--                                                        class="form-control"-->
+<!--                                                        th:placeholder="#{comment}"-->
+<!--                                                        th:value="${comment.getContent}"/>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="col-12 text-end mt-4">-->
+<!--                                            <button type="button" class="btn btn-secondary"-->
+<!--                                                    data-bs-dismiss="modal"-->
+<!--                                                    th:text="#{actions.cancel}">-->
+<!--                                            </button>-->
+<!--                                            <button type="submit" class="btn btn-primary ml-2"-->
+<!--                                                    th:text="#{actions.save}">-->
+<!--                                            </button>-->
+<!--                                        </div>-->
+<!--                                    </form>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+                    <!-- END EDIT MODAL -->
                 </div>
             </div>
         </div>
     </div>
     <div class="row mb-4">
-        <h2 class="col-12 tm-text-primary">
-            Items of the collection
+        <h2 class="col-12 tm-text-primary" th:text="collection.items">
         </h2>
         <div th:if="${collection.getItems()!=null}">
-            <h5 class="text-center tm-text-primary" th:if="${collection.getItems().size()==0}"  th:text="#{no-items}"></h5>
+            <h5 class="text-center tm-text-primary" th:if="${collection.getItems().size()==0}"
+                th:text="#{no-items}"></h5>
         </div>
     </div>
     <div class="row tm-mb-90 tm-gallery">
@@ -188,11 +269,13 @@
     </div>
 </div>
 
+
 <footer class="tm-bg-gray pt-5 pb-3 tm-text-gray tm-footer">
     <div class="container-fluid tm-container-small">
         <div class="row">
             <div class="col-lg-6 col-md-12 col-12 px-5 mb-5">
-                <h3 class="tm-text-primary mb-4 tm-footer-title" th:text="#{about-app}"></h3><p th:text="#{about-text}"></p>
+                <h3 class="tm-text-primary mb-4 tm-footer-title" th:text="#{about-app}"></h3>
+                <p th:text="#{about-text}"></p>
             </div>
             <div class="col-lg-3 col-md-6 col-sm-6 col-12 px-5 mb-5">
                 <h3 class="tm-text-primary mb-4 tm-footer-title" th:text="#{our.links}"></h3>
@@ -218,8 +301,9 @@
         </div>
     </div>
 </footer>
-
+<script src="/js/bootstrap.min.js"></script>
 <script src="/js/plugins.js"></script>
+
 <script>
     $(window).on("load", function () {
         $('body').addClass('loaded');

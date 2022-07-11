@@ -6,12 +6,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.PackagePrivate;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -32,6 +33,17 @@ public class Collection extends AbsEntity {
     @ManyToOne
     @JoinColumn(name = "topic_id")
     Topic topic;
+
+
+    public Collection(String name, String description, String imageUrl, Topic topic) {
+        this.name = name;
+        this.description = description;
+        this.imageUrl = imageUrl;
+        this.topic = topic;
+    }
+
+    @OneToMany(mappedBy = "collection",cascade = CascadeType.ALL)
+    List<Item> items;
 
 }
 

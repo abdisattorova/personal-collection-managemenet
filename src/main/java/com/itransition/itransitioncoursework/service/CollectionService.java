@@ -19,6 +19,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
@@ -160,6 +161,25 @@ public class CollectionService {
             System.out.println(comment.getContent());
         }
         return "main-page";
+    }
+
+    public String deleteCollection(UUID collectionId, RedirectAttributes attributes) {
+        Optional<Collection> byId = collectionRepository.findById(collectionId);
+        if (byId.isPresent()) {
+            try {
+                collectionRepository.deleteById(collectionId);
+                attributes.addFlashAttribute("success", true);
+                attributes.addFlashAttribute("message", "Collection successfully deleted!");
+                return "redirect:/";
+            } catch (Exception e) {
+                attributes.addFlashAttribute("success", false);
+                attributes.addFlashAttribute("message", "Collection not deleted!");
+                return "redirect:/";
+            }
+        }
+        attributes.addFlashAttribute("success", false);
+        attributes.addFlashAttribute("message", "Collection not found!");
+        return "redirect:/";
     }
 }
 
