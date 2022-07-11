@@ -33,7 +33,6 @@ public class DataLoader implements CommandLineRunner {
              */
 
 
-
             User user = userRepository.save(new User("Sevinch",
                     "Abdisattarova",
                     "abdisattarovasevinch5@gmail.com",

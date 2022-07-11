@@ -25,4 +25,7 @@ public interface CommentRepository extends JpaRepository<Comment, UUID> {
             "         join users u on c.created_by_id = u.id " +
             "where item_id = :itemId")
     List<CommentProjection> getCommentsOfItem(UUID itemId);
+
+
+    void deleteAllByCreatedBy(UUID id);
 }

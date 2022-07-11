@@ -83,4 +83,5 @@ public interface CollectionRepository
             "order by itemsCount")
     List<CollectionProjection> getMyCollections(UUID userId);
 
+    void deleteAllByCreatedBy(UUID id);
 }
