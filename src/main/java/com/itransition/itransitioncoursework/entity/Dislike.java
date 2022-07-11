@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.PackagePrivate;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -19,10 +21,12 @@ import javax.persistence.ManyToOne;
 public class Dislike extends AbsEntity {
 
    @ManyToOne
+   @OnDelete(action = OnDeleteAction.CASCADE)
    @JoinColumn(name = "user_id")
    User user;
 
    @ManyToOne
+   @OnDelete(action = OnDeleteAction.CASCADE)
    @JoinColumn(name = "item_id")
    Item item;
 

@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -22,7 +23,7 @@ import java.util.UUID;
 
 
 @Controller
-@RequestMapping("/")
+@RequestMapping("/collection")
 @RequiredArgsConstructor
 @Slf4j
 public class CollectionController {
@@ -42,13 +43,6 @@ public class CollectionController {
     }
 
 
-    @GetMapping
-    public String getMainPage(Model model,
-                              @RequestParam(value = "text", required = false) String text) {
-        return collectionService.getMainPage(model,text);
-    }
-
-
     @GetMapping("/collections")
     public String getCollections(Model model) {
         return collectionService.getAllCollections(model);
@@ -60,13 +54,13 @@ public class CollectionController {
     }
 
 
-    @GetMapping("/collection/details/{collectionId}")
+    @GetMapping("/details/{collectionId}")
     public String getDetailsOfCollection(@PathVariable UUID collectionId, Model model) {
         return collectionService.getDetailsOfCollection(collectionId, model);
     }
 
 
-    @GetMapping("/collection")
+    @GetMapping
     public String getCollectionForm(Model model) {
         model.addAttribute("collection", new CollectionDto());
         model.addAttribute("topics", topicService.getAllTopics());
@@ -74,9 +68,7 @@ public class CollectionController {
     }
 
 
-    @PostMapping(value = "/collection",
-            consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}
-    )
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public String addCollection(
             @CurrentUser User user,
             @RequestPart(value = "image", required = false) MultipartFile image,
@@ -102,5 +94,9 @@ public class CollectionController {
         return "redirect:/";
     }
 
+    @PostMapping("/delete")
+    public String deleteCollection(@RequestParam UUID collectionId, RedirectAttributes attributes) {
+        return collectionService.deleteCollection(collectionId,attributes);
+    }
 
 }

@@ -26,12 +26,11 @@ public class Item extends AbsEntity {
     String name;
 
     @ManyToOne
-    @JoinColumn(name = "collection_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "collection_id")
     Collection collection;
 
-    @ManyToMany
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "items_tags",
             joinColumns = {@JoinColumn(name = "item_id")},

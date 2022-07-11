@@ -6,12 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.PackagePrivate;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
-import javax.persistence.PreRemove;
+import javax.persistence.PostRemove;
 import java.util.List;
 
 @AllArgsConstructor
@@ -22,20 +21,15 @@ import java.util.List;
 public class Tag extends AbsEntity {
 
     String name;
-    @ManyToMany(mappedBy = "tags")
-    @OnDelete(action = OnDeleteAction.CASCADE)
+
+
+    @ManyToMany(mappedBy = "tags", cascade = CascadeType.ALL)
     List<Item> itemTags;
 
     public Tag(String name) {
         this.name = name;
     }
 
-    @PreRemove
-    private void remove() {
-        for (Item itemTag : itemTags) {
-            itemTag.getTags().remove(this);
-        }
-    }
 
 }
 

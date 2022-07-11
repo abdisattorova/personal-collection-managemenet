@@ -38,7 +38,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link nav-link-2 " href="/collections" th:text="#{collections}"></a>
+                    <a class="nav-link nav-link-2 " href="/collection/collections" th:text="#{collections}"></a>
                 </li>
 
                 <li class="nav-item">
@@ -70,7 +70,7 @@
                                th:if="${ currentUser.getRole().getRoleEnum().name()=='ADMIN'}"
                                th:text="#{dashboard.dashboard}"></a>
                             <a class="color-white" href="/collection" th:text="#{collection.add}"></a>
-                            <a class="color-white" href="/my-collections" th:text="#{collections.my}"></a>
+                            <a class="color-white" href="/collection/my-collections" th:text="#{collections.my}"></a>
                             <a class="color-white" href="/logout" th:text="#{app.logout}"></a>
                         </div>
                     </div>
@@ -84,6 +84,7 @@
 
 <div class="tm-hero d-flex justify-content-center align-items-center" data-parallax="scroll"
      data-image-src="/images/hero.jpg">
+
     <form class="d-flex tm-search-form" th:action="@{/}" method="get">
         <input class="form-control tm-search-input" type="search" name="text" th:placeholder="#{app.search}"
                aria-label="Search">
@@ -95,11 +96,22 @@
 
 
 <div class="container-fluid tm-container-content tm-mt-60">
+<!--    <div  th:unless="${message==null}">-->
+<!--        <div class="alert-error" th:unless="${success}">-->
+<!--            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>-->
+<!--            <h2 th:text="${message}"></h2>-->
+<!--        </div>-->
+<!--        <div class="alert-success" th:if="${success}">-->
+<!--            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>-->
+<!--            <h2 th:text="${message}"></h2>-->
+<!--        </div>-->
+<!--    </div>-->
     <div class="row mb-4">
+
         <h2 class="col-6 tm-text-primary" th:text="#{collections.top5LargestCollections}">
         </h2>
         <div th:if="${collections!=null}">
-            <h5 class="text-center tm-text-primary" th:if="${collections.size()==0}"  th:text="#{no-collections}"></h5>
+            <h5 class="text-center tm-text-primary" th:if="${collections.size()==0}" th:text="#{no-collections}"></h5>
         </div>
     </div>
     <div class="row tm-mb-90 tm-gallery">
@@ -121,7 +133,7 @@
         <h2 class="col-12 tm-text-primary" th:text="#{items.latest}">
         </h2>
         <div th:if="${latestItems!=null}">
-            <h5 class="text-center tm-text-primary" th:if="${latestItems.size()==0}"  th:text="#{no-items}"></h5>
+            <h5 class="text-center tm-text-primary" th:if="${latestItems.size()==0}" th:text="#{no-items}"></h5>
         </div>
     </div>
     <div class="row tm-mb-90 tm-gallery">
