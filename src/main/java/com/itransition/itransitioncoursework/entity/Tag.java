@@ -23,7 +23,7 @@ public class Tag extends AbsEntity {
     String name;
 
 
-    @ManyToMany(mappedBy = "tags", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "tags", cascade = CascadeType.MERGE)
     List<Item> itemTags;
 
     public Tag(String name) {

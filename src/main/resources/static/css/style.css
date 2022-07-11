@@ -14177,7 +14177,9 @@ fieldset:disabled .btn {
 .add__tag {
   margin-left:20px;
   margin-top: -7px;
-  border-radius: 10px
+  border-radius: 10px;
+  padding: 8px 20px;
+  margin-bottom: 10px;
 }
 
 .edit-title {
@@ -19931,6 +19933,7 @@ code {
 .stretch-card > .card {
   width: 100%;
   min-width: 100%;
+  padding: 0 20px 20px;
 }
 
 @media (min-width: 576px) {

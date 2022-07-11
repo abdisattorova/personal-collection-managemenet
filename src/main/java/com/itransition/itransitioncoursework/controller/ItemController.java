@@ -37,7 +37,8 @@ public class ItemController {
 
 
     @GetMapping("/{collectionId}")
-    public String getItemsForm(Model model, @PathVariable UUID collectionId) {
+    public String getItemsForm(Model model, @PathVariable UUID collectionId, @AuthenticationPrincipal User user) {
+        model.addAttribute("currentUser", user);
         return itemService.getItemsForm(collectionId, model);
     }
 
