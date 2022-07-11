@@ -30,7 +30,7 @@ public class Item extends AbsEntity {
     @JoinColumn(name = "collection_id")
     Collection collection;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.MERGE )
     @JoinTable(
             name = "items_tags",
             joinColumns = {@JoinColumn(name = "item_id")},

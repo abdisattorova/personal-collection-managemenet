@@ -56,9 +56,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/success-oauth2",
                         "/images/**")
                 .permitAll()
+
+//                .authenticated()
+                .antMatchers("/admin/**")
+                .hasAnyAuthority("ADMIN")
                 .anyRequest()
                 .permitAll()
-//                .authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login")

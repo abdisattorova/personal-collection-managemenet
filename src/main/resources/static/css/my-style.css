@@ -127,20 +127,15 @@ button:focus {
     color: #0e1e72;
 }
 
-
-/* ICONs */
-.fab.fa-google {
-    font-size: 24px;
+.btn__edit {
+    font-size: 1rem !important;
+    padding: 8px 25px !important;
+    margin-left: 12px !important;
 }
-
-.dashboard__edit {
-    font-size: 20px;
-    color: #ffc107;
-}
-
-.dashboard__delete {
-    font-size: 20px;
-    color: #dc3545;
+.users__icon {
+    font-size: 1.25rem;
+    margin: 5px 5px 5px 0;
+    font-weight: 600;
 }
 
 .items__detail img {
@@ -154,7 +149,6 @@ button:focus {
     padding: 20px 0 0 0;
     overflow: scroll;
     overflow-x: hidden;
-    /*position: relative;*/
 }
 
 .comments__body {
@@ -170,19 +164,11 @@ button:focus {
     color: black;
 }
 
-/*.date-time {*/
-/*    margin-left: 16rem;*/
-/*}*/
-
-/*.comments__footer {*/
-/*    position: absolute;*/
-/*    left: 0;*/
-/*    right: 0;*/
-/*    bottom: 0;*/
-/*}*/
-
 .btn-primary {
     font-size: 1.1rem !important;
+}
+.btn-secondary {
+    border-radius: 5px !important;
 }
 
 .comments-form {
@@ -217,8 +203,58 @@ button:focus {
     left: -7px;
 }
 
+#prev {
+    margin: 0 10px;
+}
+#next {
+    margin: 0 10px;
+}
+
+.modal-title, .edit-title {
+    color: black;
+}
+
+.btn__delete {
+    color: black;
+}
+
+
+/* ICONs */
+.fab.fa-google {
+    font-size: 24px;
+}
+
+.dashboard__edit {
+    font-size: 20px;
+    color: #ffc107;
+    margin: 0 5px;
+}
+
+.dashboard__delete {
+    font-size: 20px;
+    color: #dc3545;
+    margin: 0 5px;
+}
+
+.far.fa-trash-alt {
+    color: #6c757d;
+}
+
+.far.fa-unlock {
+    color: green;
+}
+
+.far.fa-lock {
+    color: #bd2130;
+}
+/*  ICONs-end */
+
 
 /* Pagination-style */
+.pagination__container {
+    margin: 0 auto;
+}
+
 .form__change, .form__change-tables {
     width: 500px;
     height: 500px;

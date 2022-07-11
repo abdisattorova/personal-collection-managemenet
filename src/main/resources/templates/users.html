@@ -13,6 +13,9 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="/css/my-style.css">
+    <link rel="stylesheet" href="/css/templatemo-style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js">
+    </script>
 
     <!--  Dark/night mode  -->
     <link rel="stylesheet" href="/css/darkmode.css">
@@ -24,60 +27,141 @@
 
 <div class="container-scroller">
     <!-- partial:/partials/_navbar.html -->
-    <nav class="navbar col-lg-12 col-12 p-0 d-flex flex-row">
-        <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-            <a class="navbar-brand brand-logo me-5" href="dashboard.html">
-                <img src="images/logo.svg"
-                     class="me-2" alt="logo"/></a>
-            <a class="navbar-brand brand-logo-mini" href="dashboard.html">
-                <img src="/images/logo-mini.svg" alt="logo"/></a>
-        </div>
+   <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#" th:text="#{app.name}">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link nav-link-1 " aria-current="page" href="/" th:text="#{app.collections}"></a>
+                </li>
 
-        <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
-            <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
-                <span class="ti-view-list"></span>
-            </button>
-            <ul class="navbar-nav mr-lg-2">
-                <li class="nav-item nav-search d-none d-lg-block">
-                    <div class="input-group">
-                        <div class="input-group-prepend hover-cursor" id="navbar-search-icon">
-                <span class="input-group-text" id="search">
-                  <i class="ti-search"></i>
-                </span>
+                <li class="nav-item">
+                    <a class="nav-link nav-link-2 " href="/collection/collections" th:text="#{collections}"></a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link nav-link-3" href="/item/all" th:text="#{items}"></a>
+                </li>
+
+                <li class="option__select">
+                    <select class="select__lang" id="locales">
+                        <option value="" th:text="#{lang.change}"></option>
+                        <option value="en" th:text="#{lang.eng}"></option>
+                        <option value="uz" th:text="#{lang.uz}"></option>
+                    </select>
+                </li>
+
+                <div class="form-check form-switch ml-5 mt-1">
+                    <input type="checkbox" class="form-check-input" id="darkSwitch">
+                </div>
+
+                <li class="nav-item mr-2" th:if="${currentUser==null}">
+                    <a class="nav-link nav-link-2" href="/login" th:text="#{app.login}"></a>
+                </li>
+
+                <li class="position-relative mt-1 mr-2" th:unless="${currentUser==null}">
+                    <div class="dropdown">
+                        <button class="dropbtn profile" th:text="${currentUser.getFirstName().charAt(0)}"></button>
+                        <div class="dropdown-content bg-light">
+                            <a class="color-white"
+                               data-bs-toggle="modal"
+                               th:attr="data-bs-target='#myProfile'+${currentUser.getId()}"
+                               th:text="#{my-profile}"
+                            ></a>
+                            <a class="color-white" href="/admin/users"
+                               th:if="${ currentUser.getRole().getRoleEnum().name()=='ADMIN'}"
+                               th:text="#{dashboard.dashboard}"></a>
+                            <a class="color-white" href="/collection" th:text="#{collection.add}"></a>
+                            <a class="color-white" href="/collection/my-collections" th:text="#{collections.my}"></a>
+                            <a class="color-white" href="/logout" th:text="#{app.logout}"></a>
                         </div>
-                        <input type="text" class="form-control" id="navbar-search-input" placeholder="Search now"
-                               aria-label="search" aria-describedby="search">
                     </div>
                 </li>
             </ul>
 
-            <ul class="navbar-nav navbar-nav-right">
-                <li class="nav-item nav-profile dropdown">
-                    <div class="form-check form-switch">
-                        <input type="checkbox" class="form-check-input mr-1" id="darkSwitch">
-                        <label class="custom-control-label" for="darkSwitch">Dark Mode</label>
+            <div class="modal fade" th:if="${currentUser!=null}" th:id="'myProfile'+${currentUser.getId()}"
+                 tabindex="-1"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-simple modal-edit-user">
+                    <div class="modal-content p-3 p-md-5">
+                        <div class="modal-body">
+                            <div class="d-flex justify-content-between mb-4">
+                                <h3 class="edit-title" th:text="#{my-profile}"></h3>
+                                <button type="button" class="btn-close"
+                                        data-bs-dismiss="modal"
+                                        aria-label="Close">
+                                </button>
+                            </div>
+                            <form id="userForm" class="row g-3" method="post"
+                                  th:action="@{/profile}">
+                                <div class="row">
+                                    <input hidden name="id" th:value="${currentUser.getId()}">
+                                    <div class="col-12 ">
+                                        <label class="form-label mt-3"
+                                               th:text="#{registration.firstName}"></label>
+                                        <input
+                                                required
+                                                type="text" name="firstName"
+                                                class="form-control"
+                                                th:placeholder="#{registration.firstNameEnter}"
+                                                th:value="${currentUser.getFirstName()}"/>
+                                    </div>
+                                    <div class="col-12 ">
+                                        <label class="form-label mt-3"
+                                               th:text="#{registration.lastName}"></label>
+                                        <input
+                                                required
+                                                type="text" name="lastName"
+                                                class="form-control"
+                                                th:placeholder="#{registration.lastNameEnter}"
+                                                th:value="${currentUser.getLastName()}"/>
+                                    </div>
+                                    <div class="col-12 ">
+                                        <label class="form-label mt-3">Email</label>
+                                        <input
+                                                required
+                                                type="text" name="email"
+                                                class="form-control"
+                                                th:placeholder="#{email.placeholder}"
+                                                th:value="${currentUser.getEmail()}"/>
+                                    </div>
+                                    <div class="col-12 ">
+                                        <label class="form-label mt-3" th:text="#{login.password}"></label>
+                                        <input
+                                                type="text" name="password"
+                                                class="form-control"
+                                                th:placeholder="#{registration.newPassword}"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-12 text-end mt-4">
+                                    <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal"
+                                            th:text="#{actions.cancel}">
+                                    </button>
+                                    <a class="btn-danger"
+                                       th:href="'profile/delete/'+${currentUser.getId()}"
+                                       th:text="#{actions.delete}"
+                                    ></a>
+                                    <button type="submit" class="btn btn-primary ml-2"
+                                            th:text="#{actions.save}">
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" id="profileDropdown">
-                        <img src='/static/images/faces/face28.jpg' alt="profile"/>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-                        <a class="dropdown-item">
-                            <i class="ti-settings text-primary"></i>
-                            Settings
-                        </a>
-                        <a class="dropdown-item">
-                            <i class="ti-power-off text-primary"></i>
-                            Logout
-                        </a>
-                    </div>
-                </li>
-            </ul>
-            <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
-                    data-toggle="offcanvas">
-                <span class="ti-view-list"></span>
-            </button>
+                </div>
+            </div>
+
         </div>
-    </nav>
+    </div>
+</nav>
 
     <!-- partial -->
     <div class="container-fluid page-body-wrapper">
@@ -94,7 +178,7 @@
 
                 <li class="nav-item">
                     <a class="nav-link" href="/tag">
-                        <i class="ti-tag"></i>
+                        <i class="ti-view-list-alt menu-icon"></i>
                         <span class="menu-title" th:text="#{dashboard.tags}"></span>
                     </a>
                 </li>
@@ -112,7 +196,7 @@
             <div class="content-wrapper">
                 <div class="row">
                     <div class="col-lg-12 grid-margin stretch-card">
-                        <div class="card">
+                        <div class="card bg-light">
                             <div class="card-body bg-light">
 
                                 <div th:if="${success}">
@@ -156,33 +240,36 @@
                                         <td th:text="${user.lastName}"></td>
                                         <td th:text="${user.email}"></td>
                                         <td>
-                                            <button type="button" class="btn btn-danger"
+                                            <button type="button"
+                                                    class="users__icon"
                                                     data-bs-toggle="modal"
                                                     th:attr="data-bs-target='#deleteUser'+${user.id}">
-                                                <i class="ti-trash"></i>
+                                                <i class="far fa-trash-alt"></i>
                                             </button>
 
-                                            <button th:if="${user.isBlocked}" type="button" class="btn btn-warning "
+                                            <button th:if="${user.isBlocked}" type="button"
+                                                    class="users__icon"
                                                     data-bs-toggle="modal"
                                                     th:attr="data-bs-target='#unblockUser'+${user.id}">
-                                                <i class="ti-unlock"></i>
+                                                <i class="far fa-unlock"></i>
                                             </button>
 
-                                            <button th:unless="${user.isBlocked}" type="button" class="btn btn-danger"
+                                            <button th:unless="${user.isBlocked}" type="button"
+                                                    class="users__icon"
                                                     data-bs-toggle="modal"
                                                     th:attr="data-bs-target='#blockUser'+${user.id}">
-                                                <i class="ti-lock"></i>
+                                                <i class="far fa-lock"></i>
                                             </button>
 
                                             <button th:if="${user.role.roleEnum.name()=='USER'}" type="button"
-                                                    class="btn btn-primary"
+                                                    class="btn__edit btn btn-primary"
                                                     data-bs-toggle="modal"
                                                     th:attr="data-bs-target='#promoteUser'+${user.id}"
                                                     th:text="#{users.promoteToAdmin}">
                                             </button>
 
                                             <button th:unless="${user.role.roleEnum.name()=='USER'}" type="button"
-                                                    class="btn btn-danger"
+                                                    class="btn__edit btn btn-danger"
                                                     data-bs-toggle="modal"
                                                     th:attr="data-bs-target='#removeUser'+${user.id}"
                                                     th:text="#{users.removeFromAdmin}">
@@ -381,6 +468,16 @@
     </div>
 </div>
 
+<script>
+    $(document).ready(function () {
+        $("#locales").change(function () {
+            var selectedOption = $('#locales').val();
+            if (selectedOption != '') {
+                window.location.replace('/admin/users?lang=' + selectedOption);
+            }
+        });
+    });
+</script>
 <script src="/js/darkmode.js"></script>
 <script src="/vendor/base/vendor.bundle.base.js"></script>
 <script src="/js/bootstrap.min.js"></script>
